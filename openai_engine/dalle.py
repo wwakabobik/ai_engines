@@ -1,11 +1,22 @@
-""" This module contains implementation for DALL-E """
 # -*- coding: utf-8 -*-
-import tempfile
+"""
+Filename: dalle.py
+Author: Iliya Vereshchagin
+Copyright (c) 2023. All rights reserved.
+
+Created: 25.08.2023
+Last Modified: 25.08.2023
+
+Description:
+This file contains implementation for DALL-E
+"""
+
 import os
+import tempfile
 import uuid
+from io import BytesIO
 
 import aiohttp
-from io import BytesIO
 import openai
 from PIL import Image
 

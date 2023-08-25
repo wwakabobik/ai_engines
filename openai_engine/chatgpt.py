@@ -1,5 +1,16 @@
-""" This module contains implementation for ChatGPT """
 # -*- coding: utf-8 -*-
+"""
+Filename: chatgpt.py
+Author: Iliya Vereshchagin
+Copyright (c) 2023. All rights reserved.
+
+Created: 25.08.2023
+Last Modified: 25.08.2023
+
+Description:
+This file contains implementation for ChatGPT
+"""
+
 import logging
 
 import openai
@@ -18,10 +29,10 @@ class GPTStatistics:
     """
 
     def __init__(
-        self,
-        prompt_tokens: int = 0,
-        completion_tokens: int = 0,
-        total_tokens: int = 0,
+            self,
+            prompt_tokens: int = 0,
+            completion_tokens: int = 0,
+            total_tokens: int = 0,
     ):
         """
         Constructs all the necessary attributes for the GPTStatistics object.
@@ -182,29 +193,29 @@ class ChatGPT:
     """
 
     def __init__(
-        self,
-        auth_token,
-        organization,
-        model: str = COMPLETIONS[0],
-        choices: int = 1,
-        temperature: float = 1,
-        top_p: float = 1,
-        stream: bool = False,
-        stop: str = None,
-        max_tokens: int = 1024,
-        presence_penalty: float = 0,
-        frequency_penalty: float = 0,
-        logit_bias: map = None,
-        user: str = "",
-        functions: list = None,
-        function_call: str = None,
-        history_length: int = 5,
-        chats: dict = None,
-        current_chat: str = None,
-        prompt_method: bool = False,
-        logger: logging.Logger = None,
-        statistics: GPTStatistics = GPTStatistics(),
-        system_settings: str = None,
+            self,
+            auth_token,
+            organization,
+            model: str = COMPLETIONS[0],
+            choices: int = 1,
+            temperature: float = 1,
+            top_p: float = 1,
+            stream: bool = False,
+            stop: str = None,
+            max_tokens: int = 1024,
+            presence_penalty: float = 0,
+            frequency_penalty: float = 0,
+            logit_bias: map = None,
+            user: str = "",
+            functions: list = None,
+            function_call: str = None,
+            history_length: int = 5,
+            chats: dict = None,
+            current_chat: str = None,
+            prompt_method: bool = False,
+            logger: logging.Logger = None,
+            statistics: GPTStatistics = GPTStatistics(),
+            system_settings: str = None,
     ):
         """
         General init
@@ -688,7 +699,7 @@ class ChatGPT:
                 pass
         else:
             # Get last 'history_length' messages
-            messages = self.chats[chat_name][-self.history_length :]
+            messages = self.chats[chat_name][-self.history_length:]
             messages.insert(0, {"role": "system", "content": self.system_settings})
 
             try:

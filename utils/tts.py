@@ -1,4 +1,16 @@
 # -*- coding: utf-8 -*-
+"""
+Filename: tts.py
+Author: Iliya Vereshchagin
+Copyright (c) 2023. All rights reserved.
+
+Created: 25.08.2023
+Last Modified: 25.08.2023
+
+Description:
+This module contains implementation for Text-to-Speach tools
+"""
+
 import os
 import tempfile
 from time import sleep
@@ -12,7 +24,7 @@ from pyttsx4 import init as pyttsx_init
 
 class CustomTTS:
     def __init__(
-        self, method="google", lang="en", speedup=1.3, frame=0.1, voice="com.apple.voice.enhanced.ru-RU.Katya"
+            self, method="google", lang="en", speedup=1.3, frame=0.1, voice="com.apple.voice.enhanced.ru-RU.Katya"
     ):
         self.___method = method
         self.___player = MPyg321Player()

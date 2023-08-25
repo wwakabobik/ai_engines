@@ -1,12 +1,23 @@
-""" This module contains implementation for Audio Recorder """
+# -*- coding: utf-8 -*-
+"""
+Filename: audio_recorder.py
+Author: Iliya Vereshchagin
+Copyright (c) 2023. All rights reserved.
+
+Created: 25.08.2023
+Last Modified: 25.08.2023
+
+Description:
+This file contains implementation for Audio Recorder
+"""
+
+import math
 import os
 import struct
 import tempfile
 import time
 import wave
 
-# -*- coding: utf-8 -*-
-import math
 import pyaudio
 import sounddevice as sd
 import soundfile as sf
@@ -30,21 +41,21 @@ def record_and_convert_audio(duration=10, fs=44100):
     return mp3_file_path
 
 
-class Recorder:
+class AudioRecorder:
     def __init__(
-        self,
-        pyaudio_obj=pyaudio.PyAudio(),
-        threshold=15,
-        channels=1,
-        chunk=1024,
-        f_format=pyaudio.paInt16,
-        rate=16000,
-        swidth=2,
-        timeout_length=2,
-        temp_dir=tempfile.gettempdir(),
-        normalize=(1.0 / 32768.0),
-        pa_input=True,
-        pa_output=True,
+            self,
+            pyaudio_obj=pyaudio.PyAudio(),
+            threshold=15,
+            channels=1,
+            chunk=1024,
+            f_format=pyaudio.paInt16,
+            rate=16000,
+            swidth=2,
+            timeout_length=2,
+            temp_dir=tempfile.gettempdir(),
+            normalize=(1.0 / 32768.0),
+            pa_input=True,
+            pa_output=True,
     ):
         self.___pyaudio = pyaudio_obj
         self.___threshold = threshold

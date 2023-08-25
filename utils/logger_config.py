@@ -1,4 +1,15 @@
-""" This file contains an configuration for loggers. """
+# -*- coding: utf-8 -*-
+"""
+Filename: logger_config.py
+Author: Iliya Vereshchagin
+Copyright (c) 2023. All rights reserved.
+
+Created: 25.08.2023
+Last Modified: 25.08.2023
+
+Description:
+This file contains configuration for loggers.
+"""
 
 import logging
 import sys

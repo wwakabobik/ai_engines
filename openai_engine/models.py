@@ -1,4 +1,15 @@
-""" This file contains OpenAI constants """
+# -*- coding: utf-8 -*-
+"""
+Filename: models.py
+Author: Iliya Vereshchagin
+Copyright (c) 2023. All rights reserved.
+
+Created: 25.08.2023
+Last Modified: 25.08.2023
+
+Description:
+This file contains OpenAI constants
+"""
 
 COMPLETIONS = [
     "gpt-4",

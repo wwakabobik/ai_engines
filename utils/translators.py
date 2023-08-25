@@ -1,5 +1,15 @@
-""" This module contains implementation for Custom Translator """
 # -*- coding: utf-8 -*-
+"""
+Filename: translators.py
+Author: Iliya Vereshchagin
+Copyright (c) 2023. All rights reserved.
+
+Created: 25.08.2023
+Last Modified: 25.08.2023
+
+Description:
+This module contains implementation for Custom Translator
+"""
 
 from deep_translator import GoogleTranslator
 
