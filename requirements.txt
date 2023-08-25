@@ -1,0 +1,21 @@
+aiohttp==3.8.5
+pyobjc
+# OpenAI
+openai==0.27.9
+# TTS
+gtts==2.3.2
+pyttsx4==3.0.15
+mpyg321==2.1.1
+mutagen==1.46.0
+pydub==0.25.1
+# Transcriptor
+SpeechRecognition==3.10.0
+# Translator
+deep_translator==1.11.4
+# Recorder
+pyaudio==0.2.13
+sounddevice==0.4.6
+soundfile==0.12.1
+numpy==1.25.2
+# Image
+pillow==10.0.0
