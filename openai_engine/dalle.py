@@ -10,7 +10,7 @@ Last Modified: 25.08.2023
 Description:
 This file contains implementation for DALL-E
 """
-
+import logging
 import os
 import tempfile
 import uuid
@@ -22,13 +22,39 @@ from PIL import Image
 
 
 class DALLE:
-    def __init__(self, auth_token, organization, default_count=1, default_size="512x512", default_file_format='PNG',
-                 user=None):
+    """
+    The ChatGPT class is for managing an instance of the ChatGPT model.
+
+    Parameters:
+    auth_token (str): Authentication bearer token. Required.
+    organization (str): Organization uses auth toke. Required.
+    default_count (int): Default count of images to produce. Default is 1.
+    default_size (str): Default dimensions for output images. Default is "512x512". "256x256" and "1024x1024" as option.
+    default_file_format (str): Default file format. Optional. Default is 'PNG'.
+    user (str, optional): The user ID. Default is ''.
+    logger (logging.Logger, optional): default logger. Default is None.
+    """
+
+    def __init__(self, auth_token: str, organization: str, default_count: int = 1, default_size: str = "512x512",
+                 default_file_format: str = 'PNG',
+                 user: str = '', logger: logging.Logger = None):
+        """
+        General init
+
+        :param auth_token (str): Authentication bearer token. Required.
+        :param organization (str): Organization uses auth toke. Required.
+        :param default_count:  Default count of images to produce. Optional. Default is 1.
+        :param default_size:  Default dimensions for output images. Optional. Default is "512x512".
+        :param default_file_format:  Default file format. Optional. Optional. Default is 'PNG'.
+        :param user: The user ID. Optional. Default is ''.
+        :param logger: default logger. Optional. Default is None.
+        """
         self.___default_count = default_count
         self.___default_size = default_size
         self.___default_file_format = default_file_format
         self.___user = user
         self.___set_auth(auth_token, organization)
+        self.___logger = logger
 
     @staticmethod
     def ___set_auth(token, organization):
@@ -167,7 +193,7 @@ class DALLE:
 
         :return: A PIL.Image object created from the image data received from the API.
         """
-        response = await openai.Image.acreate_variation(file=file, n=self.default_count, size=self.default_size,
+        response = await openai.Image.acreate_variation(image=file, n=self.default_count, size=self.default_size,
                                                         user=self.user)
         image_url = response["data"][0]["url"]
         async with aiohttp.ClientSession() as session:
@@ -187,7 +213,7 @@ class DALLE:
             async with session.get(url) as resp:
                 image_data = await resp.read()
 
-        response = await openai.Image.acreate_variation(BytesIO(image_data), n=self.default_count,
+        response = await openai.Image.acreate_variation(image=BytesIO(image_data), n=self.default_count,
                                                         size=self.default_size,
                                                         user=self.user)
         image_url = response["data"][0]["url"]
@@ -206,7 +232,7 @@ class DALLE:
                      If provided, the mask will be applied to the image.
         :return: A PIL.Image object created from the image data received from the API.
         """
-        response = await openai.Image.acreate_edit(file=file, prompt=prompt, mask=mask,
+        response = await openai.Image.acreate_edit(image=file, prompt=prompt, mask=mask,
                                                    n=self.default_count, size=self.default_size,
                                                    user=self.user)
         image_url = response["data"][0]["url"]
@@ -231,7 +257,7 @@ class DALLE:
         async with aiohttp.ClientSession() as session:
             async with session.get(mask_url) as resp:
                 mask_data = await resp.read()
-        response = await openai.Image.acreate_edit(file=BytesIO(image_data), prompt=prompt, mask=BytesIO(mask_data),
+        response = await openai.Image.acreate_edit(image=BytesIO(image_data), prompt=prompt, mask=BytesIO(mask_data),
                                                    n=self.default_count, size=self.default_size,
                                                    user=self.user)
         image_url = response["data"][0]["url"]

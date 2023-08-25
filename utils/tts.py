@@ -23,9 +23,29 @@ from pyttsx4 import init as pyttsx_init
 
 
 class CustomTTS:
+    """
+    The GPTStatistics class is for managing an instance of the Custom Text-to-Speach models.
+
+    Parameters:
+    method (str): Default method to use TTS. Default is 'google'.
+    lang: language in ISO 639-1 format. Default is 'en'.
+    speedup (float): Speedup ratio. Default is 1.3.
+    frame (float): audio sample frame in seconds. Default is 0.1.
+    voice (str): default TTS voice to use. Default is 'com.apple.voice.enhanced.ru-RU.Katya'
+    """
+
     def __init__(
             self, method="google", lang="en", speedup=1.3, frame=0.1, voice="com.apple.voice.enhanced.ru-RU.Katya"
     ):
+        """
+        General init.
+
+        :param method: Default method to use TTS. Default is 'google'.
+        :param lang: language in ISO 639-1 format. Default is 'en'.
+        :param speedup: Speedup ratio. Default is 1.3.
+        :param frame: audio sample frame in seconds. Default is 0.1.
+        :param voice: default TTS voice to use. Default is 'com.apple.voice.enhanced.ru-RU.Katya'
+        """
         self.___method = method
         self.___player = MPyg321Player()
         self.___pytts = pyttsx_init()
@@ -34,13 +54,18 @@ class CustomTTS:
         self.___speedup = speedup
         self.___frame = frame
 
-    def __process_via_gtts(self, answer):
+    def __process_via_gtts(self, text):
+        """
+        Converts text to speach using Google text-to-speach method
+
+        :param text: Text needs to be converted to speach.
+        """
         temp_dir = tempfile.gettempdir()
         # gtts
-        tts = gTTS(answer, lang=self.___lang)
+        tts = gTTS(text, lang=self.___lang)
         tts.save(f"{temp_dir}/raw.mp3")
         audio = AudioSegment.from_file(f"{temp_dir}/raw.mp3", format="mp3")
-        new = audio.speedup(1.3)  # speed up by 2x
+        new = audio.speedup(self.___speedup)  # speed up by 2x
         os.remove(f"{temp_dir}/raw.mp3")
         new.export(f"{temp_dir}/response.mp3", format="mp3")
         # player
@@ -50,23 +75,38 @@ class CustomTTS:
         self.___player.stop()
         os.remove(f"{temp_dir}/response.mp3")
 
-    def __process_via_pytts(self, answer):
+    def __process_via_pytts(self, text):
+        """
+        Converts text to speach using python-tts text-to-speach method
+
+        :param text: Text needs to be converted to speach.
+        """
         engine = self.___pytts
         engine.setProperty("voice", self.___voice)
-        engine.say(answer)
+        engine.say(text)
         engine.startLoop(False)
 
         while engine.isBusy():
             engine.iterate()
-            sleep(0.1)
+            sleep(self.___frame)
 
         engine.endLoop()
 
-    async def process(self, answer):
+    async def process(self, text):
+        """
+        Converts text to speach using pre-defined model
+
+        :param text: Text needs to be converted to speach.
+        """
         if "google" in self.___method:
-            self.__process_via_gtts(answer)
+            self.__process_via_gtts(text)
         else:
-            self.__process_via_pytts(answer)
+            self.__process_via_pytts(text)
 
     def get_pytts_voices_list(self):
+        """
+        Returns list of possible voices
+
+        :return: (list) of possible voices
+        """
         return self.___pytts.getProperty("voices")

@@ -15,12 +15,12 @@ import logging
 
 import openai
 
-from models import COMPLETIONS, TRANSCRIPTIONS, TRANSLATIONS
+from openai_engine.models import COMPLETIONS, TRANSCRIPTIONS, TRANSLATIONS
 
 
 class GPTStatistics:
     """
-    The GPTStatistics class is for creating an instance of the GPTStatistics model.
+    The GPTStatistics class is for managing an instance of the GPTStatistics model.
 
     Parameters:
     prompt_tokens (int): The number of tokens in the prompt. Default is 0.
@@ -162,7 +162,7 @@ class GPTStatistics:
 
 class ChatGPT:
     """
-    The ChatGPT class is for creating an instance of the ChatGPT model.
+    The ChatGPT class is for managing an instance of the ChatGPT model.
 
     Parameters:
     auth_token (str): Authentication bearer token. Required.
@@ -194,8 +194,8 @@ class ChatGPT:
 
     def __init__(
             self,
-            auth_token,
-            organization,
+            auth_token: str,
+            organization: str,
             model: str = COMPLETIONS[0],
             choices: int = 1,
             temperature: float = 1,

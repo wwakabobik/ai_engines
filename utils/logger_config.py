@@ -17,7 +17,17 @@ import sys
 from utils.other import is_heroku_environment
 
 
-def setup_logger(name, log_file, level=logging.DEBUG):
+def setup_logger(name: str, log_file: str, level=logging.DEBUG):
+    """
+    Method to setup logger
+
+    :param name: (string) Name of the logger.
+    :param log_file: path to log_file
+    :param level: logging level. Default is logging.DEBUG
+
+    :returns: logger object
+
+    """
     formatter = logging.Formatter("%(asctime)s [%(levelname)s] %(name)s: %(message)s")
 
     file_handler = logging.FileHandler(log_file)
