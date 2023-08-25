@@ -31,6 +31,10 @@ jobs:
         pip install mypy reorder-python-imports
         pip install wemake-python-styleguide reorder-python-imports
         pip install black reorder-python-imports
+        pip install --global-option='build_ext' \
+            --global-option='-I/usr/local/include' \
+            --global-option='-L/usr/local/lib' \
+            pyaudio
     - name: Analysing the code with pylint
       id: pylint
       continue-on-error: true
