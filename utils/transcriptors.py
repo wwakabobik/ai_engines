@@ -54,7 +54,8 @@ class CustomTranscriptor:
         :return: transcripted text (string).
         """
         print("Listening beginning...")
-        audio = self.___recognizer.listen(self.___source, timeout=5)
+        with self.___source as source:
+            audio = self.___recognizer.listen(source, timeout=5)
 
         user_input = None
         try:

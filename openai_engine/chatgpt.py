@@ -11,6 +11,7 @@ Description:
 This file contains implementation for ChatGPT
 """
 
+import json
 import logging
 
 import openai
@@ -181,6 +182,7 @@ class ChatGPT:
     user (str, optional): The user ID. Default is ''.
     functions (list, optional): The list of functions. Default is None.
     function_call (str, optional): The function call. Default is None.
+    function_dict (dict, optional): Dict of functions. Default is None.
     history_length (int, optional): Length of history. Default is 5.
     chats (dict, optional): Chats dictionary, contains all chat. Default is None.
     current_chat (str, optional): Default chat will be used. Default is None.
@@ -218,6 +220,7 @@ class ChatGPT:
         logger: logging.Logger = None,
         statistics: GPTStatistics = GPTStatistics(),
         system_settings: str = None,
+        function_dict: dict = None,
     ):
         """
         General init
@@ -237,6 +240,7 @@ class ChatGPT:
         :param user: The user ID. Default is ''.
         :param functions: The list of functions. Default is None.
         :param function_call: The function call. Default is None.
+        :param function_dict: Dict of functions. Default is None.
         :param history_length: Length of history. Default is 5.
         :param chats: Chats dictionary, contains all chat. Default is None.
         :param current_chat: Default chat will be used. Default is None.
@@ -258,6 +262,7 @@ class ChatGPT:
         self.___user = user
         self.___functions = functions
         self.___function_call = function_call
+        self.___function_dict = function_dict
         self.___history_length = history_length
         self.___chats = chats if chats else {}
         self.___current_chat = current_chat
@@ -513,6 +518,24 @@ class ChatGPT:
         self.___function_call = value
 
     @property
+    def function_dict(self):
+        """
+        Getter for function_dict.
+
+        :return: The function dict.
+        """
+        return self.___function_dict
+
+    @function_dict.setter
+    def function_dict(self, value):
+        """
+        Setter for function_dict.
+
+        :param value: The new function dict.
+        """
+        self.___function_dict = value
+
+    @property
     def history_length(self):
         """
         Getter for history_length.
@@ -620,12 +643,13 @@ class ChatGPT:
         """
         self.___logger = value
 
-    async def process_chat(self, prompt, default_choice=None):
+    async def process_chat(self, prompt, default_choice=0, chat_name=None):
         """
         Creates a new chat completion for the provided messages and parameters.
 
         :param prompt: The prompt to pass to the model.
         :param default_choice: Default number of choice to monitor for stream end. By default, is None.
+        :param chat_name: Chat name for function tracking. Should be handled by caller. By default, is None.
 
         :return: Returns answers by chunk if 'stream' is false True, otherwise return complete answer.
         """
@@ -655,18 +679,76 @@ class ChatGPT:
             params["messages"] = prompt
 
         # Get response
+        func_response = None
+        func_call = dict()
         if self.stream:
             try:
                 async for chunk in await openai.ChatCompletion.acreate(**params):
-                    if default_choice is not None:
+                    if "function_call" in chunk["choices"][default_choice]["delta"]:
+                        raw_call = chunk["choices"][default_choice]["delta"]["function_call"]
+                        for key, value in raw_call.items():
+                            if key in func_call and isinstance(value, str):
+                                func_call[key] += value
+                            elif key in func_call and isinstance(func_call[key], dict) and isinstance(value, dict):
+                                func_call[key].update(value)
+                            else:
+                                func_call[key] = value
+                    if chunk["choices"][default_choice]["finish_reason"] is not None:
+                        if chunk["choices"][default_choice]["finish_reason"] == 'function_call':
+                            print(func_call)
+                            func_response = await self.process_function(function_call=func_call)
+                        break
+                    if "content" in chunk["choices"][default_choice]["delta"]:
+                        if chunk["choices"][default_choice]["delta"]["content"]:
+                            yield chunk
+                        else:
+                            continue
+                    else:
+                        continue
+            except GeneratorExit:
+                pass
+            try:
+                if func_response:
+                    # Save to history
+                    if chat_name:
+                        self.chats[chat_name].append(func_response)
+                    # Add new prompt
+                    if self.prompt_method:
+                        params.pop("prompt", None)
+                        params["messages"] = list()
+                        params["messages"].append(func_response)
+                    else:
+                        params["messages"].append(func_response)
+                    async for chunk in await openai.ChatCompletion.acreate(**params):
+                        yield chunk
                         if chunk["choices"][default_choice]["finish_reason"] is not None:
                             break
-                    yield chunk
             except GeneratorExit:
                 pass
         else:
             response = await openai.ChatCompletion.acreate(**params)
-            yield response
+            if response["choices"][default_choice]["finish_reason"] == 'function_call':
+                func_response = await self.process_function(
+                    function_call=response["choices"][default_choice]["message"]["function_call"]
+                )
+            try:
+                if func_response:
+                    # Save to history
+                    if chat_name:
+                        self.chats[chat_name].append(func_response)
+                    # Add new prompt
+                    if self.prompt_method:
+                        params.pop("prompt", None)
+                        params["messages"] = list()
+                        params["messages"].append(func_response)
+                    else:
+                        params["messages"].append(func_response)
+                    response = await openai.ChatCompletion.acreate(**params)
+                    yield response
+                else:
+                    yield response
+            except GeneratorExit:
+                pass
 
     async def __handle_chat_name(self, chat_name, prompt):
         """
@@ -693,13 +775,6 @@ class ChatGPT:
         :param default_choice: Index of the model's response choice.
         """
         # pylint: disable=too-many-branches
-        # Set chat_name
-        chat_name = chat_name if chat_name is not None else self.current_chat
-        chat_name = await self.__handle_chat_name(chat_name, prompt)
-
-        # Add new message to chat
-        self.chats[chat_name].append({"role": "user", "content": prompt})
-
         # Call process_chat
         full_prompt = ""
         if self.prompt_method:
@@ -720,12 +795,19 @@ class ChatGPT:
             except GeneratorExit:
                 pass
         else:
+            # Set chat_name
+            chat_name = chat_name if chat_name is not None else self.current_chat
+            chat_name = await self.__handle_chat_name(chat_name, prompt)
+            # Add new message to chat
+            self.chats[chat_name].append({"role": "user", "content": prompt})
             # Get last 'history_length' messages
-            messages = self.chats[chat_name][-self.history_length :]
+            messages = self.chats[chat_name][-self.history_length:]
             messages.insert(0, {"role": "system", "content": self.system_settings})
 
             try:
-                async for response in self.process_chat(prompt=messages, default_choice=default_choice):
+                async for response in self.process_chat(
+                    prompt=messages, default_choice=default_choice, chat_name=chat_name
+                ):
                     if isinstance(response, dict):
                         finish_reason = response["choices"][default_choice].get("finish_reason", "")
                         yield response
@@ -812,3 +894,16 @@ class ChatGPT:
         return await openai.Audio.atranslate(
             model=TRANSLATIONS[0], file=file, response_format=response_format, temperature=self.temperature, **kwargs
         )
+
+    async def process_function(self, function_call):
+        """
+        Process function requested by ChatGPT.
+
+        :param function_call: Function name and arguments. In JSON format.
+
+        :return: transcription (text, json, srt, verbose_json or vtt)
+        """
+        function_name = function_call["name"]
+        function_to_call = self.function_dict[function_name]
+        function_response = function_to_call(**json.loads(function_call["arguments"]))
+        return {"role": "function", "name": function_name, "content": function_response}

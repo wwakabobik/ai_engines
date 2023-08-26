@@ -246,7 +246,7 @@ class AudioRecorder:
         :return: The RMS value of the audio frame.
         """
         count = len(frame) / self.___sample_width
-        f_format = f"{count}dh"
+        f_format = "%dh" % count
         shorts = struct.unpack(f_format, frame)
 
         sum_squares = 0.0
