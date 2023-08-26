@@ -95,6 +95,14 @@ class CustomTTS:
 
         engine.endLoop()
 
+    def get_pytts_voices_list(self):
+        """
+        Returns list of possible voices
+
+        :return: (list) of possible voices
+        """
+        return self.___pytts.getProperty("voices")
+
     async def process(self, text):
         """
         Converts text to speach using pre-defined model
@@ -105,11 +113,3 @@ class CustomTTS:
             self.__process_via_gtts(text)
         else:
             self.__process_via_pytts(text)
-
-    def get_pytts_voices_list(self):
-        """
-        Returns list of possible voices
-
-        :return: (list) of possible voices
-        """
-        return self.___pytts.getProperty("voices")
