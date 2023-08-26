@@ -713,7 +713,7 @@ class ChatGPT:
                                 full_prompt += response["choices"][default_choice]["delta"]["content"]
                         else:
                             full_prompt += response["choices"][default_choice]["message"]["content"]
-                        if finish_reason in ["stop", "length", "function_call"]:
+                        if finish_reason is not None:
                             yield ""
                     else:
                         break
@@ -734,7 +734,7 @@ class ChatGPT:
                                 full_prompt += response["choices"][default_choice]["delta"]["content"]
                         else:
                             full_prompt += response["choices"][default_choice]["message"]["content"]
-                        if finish_reason in ["stop", "length", "function_call"]:
+                        if finish_reason is not None:
                             yield ""
                     else:
                         break
@@ -785,7 +785,7 @@ class ChatGPT:
         kwargs = {}
         if prompt is not None:
             kwargs["prompt"] = prompt
-        transcription = await openai.Audio.atranscribe(
+        return await openai.Audio.atranscribe(
             model=TRANSCRIPTIONS[0],
             file=file,
             language=language,
@@ -793,7 +793,6 @@ class ChatGPT:
             temperature=self.temperature,
             **kwargs,
         )
-        return transcription
 
     async def translate(self, file, prompt=None, response_format="text"):
         """
@@ -810,7 +809,6 @@ class ChatGPT:
         kwargs = {}
         if prompt is not None:
             kwargs["prompt"] = prompt
-        translation = await openai.Audio.atranslate(
+        return await openai.Audio.atranslate(
             model=TRANSLATIONS[0], file=file, response_format=response_format, temperature=self.temperature, **kwargs
         )
-        return translation

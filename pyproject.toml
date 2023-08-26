@@ -21,7 +21,12 @@ extend-ignore = """
     WPS412,
     DAR301,
     D401,
-    D205
+    D205,
+    WPS615,
+    I004,
+    WPS110,
+    WPS420,
+    C812
 """
 
 [tool.pylint]
