@@ -18,6 +18,7 @@ class CustomTranslator(GoogleTranslator):
     """
     This class implements wrapper for GoogleTranslator
     """
+
     def __init__(self, source, target, **kwargs):
         """
         General init.

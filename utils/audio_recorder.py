@@ -75,19 +75,19 @@ class AudioRecorder:
     """
 
     def __init__(
-            self,
-            pyaudio_obj=pyaudio.PyAudio(),
-            threshold=15,
-            channels=1,
-            chunk=1024,
-            f_format=pyaudio.paInt16,
-            rate=16000,
-            sample_width=2,
-            timeout_length=2,
-            temp_dir=tempfile.gettempdir(),
-            normalize=(1.0 / 32768.0),
-            pa_input=True,
-            pa_output=True,
+        self,
+        pyaudio_obj=pyaudio.PyAudio(),
+        threshold=15,
+        channels=1,
+        chunk=1024,
+        f_format=pyaudio.paInt16,
+        rate=16000,
+        sample_width=2,
+        timeout_length=2,
+        temp_dir=tempfile.gettempdir(),
+        normalize=(1.0 / 32768.0),
+        pa_input=True,
+        pa_output=True,
     ):
         """
         General init.

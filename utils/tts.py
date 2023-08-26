@@ -36,7 +36,7 @@ class CustomTTS:
     """
 
     def __init__(
-            self, method="google", lang="en", speedup=1.3, frame=0.1, voice="com.apple.voice.enhanced.ru-RU.Katya"
+        self, method="google", lang="en", speedup=1.3, frame=0.1, voice="com.apple.voice.enhanced.ru-RU.Katya"
     ):
         """
         General init.
@@ -66,7 +66,7 @@ class CustomTTS:
         tts = gTTS(text, lang=self.___lang)
         raw_file = f"{temp_dir}/{str(uuid4())}.mp3"
         tts.save(raw_file)
-        audio = AudioSegment.from_file( raw_file, format="mp3")
+        audio = AudioSegment.from_file(raw_file, format="mp3")
         new = audio.speedup(self.___speedup)
         os.remove(raw_file)
         response_file = f"{temp_dir}/{str(uuid4())}.mp3"

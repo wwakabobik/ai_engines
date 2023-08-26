@@ -35,9 +35,16 @@ class DALLE:
     logger (logging.Logger, optional): default logger. Default is None.
     """
 
-    def __init__(self, auth_token: str, organization: str, default_count: int = 1, default_size: str = "512x512",
-                 default_file_format: str = 'PNG',
-                 user: str = '', logger: logging.Logger = None):
+    def __init__(
+        self,
+        auth_token: str,
+        organization: str,
+        default_count: int = 1,
+        default_size: str = "512x512",
+        default_file_format: str = "PNG",
+        user: str = "",
+        logger: logging.Logger = None,
+    ):
         """
         General init
 
@@ -165,8 +172,9 @@ class DALLE:
 
         :return: A PIL.Image object created from the image data received from the API.
         """
-        response = await openai.Image.acreate(prompt=prompt, n=self.default_count, size=self.default_size,
-                                              user=self.user)
+        response = await openai.Image.acreate(
+            prompt=prompt, n=self.default_count, size=self.default_size, user=self.user
+        )
         image_url = response["data"][0]["url"]
         async with aiohttp.ClientSession() as session:
             async with session.get(image_url) as resp:
@@ -183,7 +191,7 @@ class DALLE:
         image.show()
 
     def save_image(self, image, filename=None, file_format=None):
-        """ Saves an image to a file.
+        """Saves an image to a file.
 
         :param image: A PIL.Image object to be saved.
         :param filename: The name of the file where the image will be saved.
@@ -195,7 +203,7 @@ class DALLE:
         if file_format is None:
             file_format = self.default_file_format
         if filename is None:
-            filename = os.path.join(tempfile.gettempdir(), f'{uuid.uuid4()}.{file_format.lower()}')
+            filename = os.path.join(tempfile.gettempdir(), f"{uuid.uuid4()}.{file_format.lower()}")
         try:
             image.save(filename, format=format)
         except Exception as error:
@@ -211,8 +219,9 @@ class DALLE:
 
         :return: A PIL.Image object created from the image data received from the API.
         """
-        response = await openai.Image.acreate_variation(image=file, n=self.default_count, size=self.default_size,
-                                                        user=self.user)
+        response = await openai.Image.acreate_variation(
+            image=file, n=self.default_count, size=self.default_size, user=self.user
+        )
         image_url = response["data"][0]["url"]
         async with aiohttp.ClientSession() as session:
             async with session.get(image_url) as resp:
@@ -231,9 +240,9 @@ class DALLE:
             async with session.get(url) as resp:
                 image_data = await resp.read()
 
-        response = await openai.Image.acreate_variation(image=BytesIO(image_data), n=self.default_count,
-                                                        size=self.default_size,
-                                                        user=self.user)
+        response = await openai.Image.acreate_variation(
+            image=BytesIO(image_data), n=self.default_count, size=self.default_size, user=self.user
+        )
         image_url = response["data"][0]["url"]
         async with aiohttp.ClientSession() as session:
             async with session.get(image_url) as resp:
@@ -250,9 +259,9 @@ class DALLE:
                      If provided, the mask will be applied to the image.
         :return: A PIL.Image object created from the image data received from the API.
         """
-        response = await openai.Image.acreate_edit(image=file, prompt=prompt, mask=mask,
-                                                   n=self.default_count, size=self.default_size,
-                                                   user=self.user)
+        response = await openai.Image.acreate_edit(
+            image=file, prompt=prompt, mask=mask, n=self.default_count, size=self.default_size, user=self.user
+        )
         image_url = response["data"][0]["url"]
         async with aiohttp.ClientSession() as session:
             async with session.get(image_url) as resp:
@@ -275,9 +284,14 @@ class DALLE:
         async with aiohttp.ClientSession() as session:
             async with session.get(mask_url) as resp:
                 mask_data = await resp.read()
-        response = await openai.Image.acreate_edit(image=BytesIO(image_data), prompt=prompt, mask=BytesIO(mask_data),
-                                                   n=self.default_count, size=self.default_size,
-                                                   user=self.user)
+        response = await openai.Image.acreate_edit(
+            image=BytesIO(image_data),
+            prompt=prompt,
+            mask=BytesIO(mask_data),
+            n=self.default_count,
+            size=self.default_size,
+            user=self.user,
+        )
         image_url = response["data"][0]["url"]
         async with aiohttp.ClientSession() as session:
             async with session.get(image_url) as resp:
