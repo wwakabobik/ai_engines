@@ -692,6 +692,7 @@ class ChatGPT:
         :param chat_name: Name of the chat. If None, uses self.current_chat.
         :param default_choice: Index of the model's response choice.
         """
+        # pylint: disable=too-many-branches
         # Set chat_name
         chat_name = chat_name if chat_name is not None else self.current_chat
         chat_name = await self.__handle_chat_name(chat_name, prompt)

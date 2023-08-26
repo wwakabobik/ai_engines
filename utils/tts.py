@@ -14,6 +14,7 @@ This module contains implementation for Text-to-Speach tools
 import os
 import tempfile
 from time import sleep
+from uuid import uuid4
 
 from gtts import gTTS
 from mpyg321.mpyg321 import MPyg321Player
@@ -63,17 +64,19 @@ class CustomTTS:
         temp_dir = tempfile.gettempdir()
         # gtts
         tts = gTTS(text, lang=self.___lang)
-        tts.save(f"{temp_dir}/raw.mp3")
-        audio = AudioSegment.from_file(f"{temp_dir}/raw.mp3", format="mp3")
-        new = audio.speedup(self.___speedup)  # speed up by 2x
-        os.remove(f"{temp_dir}/raw.mp3")
-        new.export(f"{temp_dir}/response.mp3", format="mp3")
+        raw_file = f"{temp_dir}/{str(uuid4())}.mp3"
+        tts.save(raw_file)
+        audio = AudioSegment.from_file( raw_file, format="mp3")
+        new = audio.speedup(self.___speedup)
+        os.remove(raw_file)
+        response_file = f"{temp_dir}/{str(uuid4())}.mp3"
+        new.export(response_file, format="mp3")
         # player
-        self.___player.play_song(f"{temp_dir}/response.mp3")
-        audio = MP3(f"{temp_dir}/response.mp3")
+        self.___player.play_song(response_file)
+        audio = MP3(response_file)
         sleep(audio.info.length)
         self.___player.stop()
-        os.remove(f"{temp_dir}/response.mp3")
+        os.remove(response_file)
 
     def __process_via_pytts(self, text):
         """
