@@ -109,12 +109,12 @@ class AudioRecorder:
         n_files = len(os.listdir(self.___temp_dir))
         filename = os.path.join(self.___temp_dir, f"{n_files}.wav")
 
-        wf = wave.open(filename, "wb")
-        wf.setnchannels(self.___channels)
-        wf.setsampwidth(self.p.get_sample_size(self.___format))
-        wf.setframerate(self.___rate)
-        wf.writeframes(recording)
-        wf.close()
+        wave_form = wave.open(filename, "wb")
+        wave_form.setnchannels(self.___channels)
+        wave_form.setsampwidth(self.p.get_sample_size(self.___format))
+        wave_form.setframerate(self.___rate)
+        wave_form.writeframes(recording)
+        wave_form.close()
         return filename
 
     def convert_to_mp3(self, filename):

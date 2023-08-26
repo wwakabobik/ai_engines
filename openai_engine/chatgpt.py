@@ -5,7 +5,7 @@ Author: Iliya Vereshchagin
 Copyright (c) 2023. All rights reserved.
 
 Created: 25.08.2023
-Last Modified: 25.08.2023
+Last Modified: 26.08.2023
 
 Description:
 This file contains implementation for ChatGPT
@@ -160,6 +160,7 @@ class GPTStatistics:
         }
 
 
+# pylint: disable=too-many-instance-attributes,too-many-public-methods
 class ChatGPT:
     """
     The ChatGPT class is for managing an instance of the ChatGPT model.
@@ -193,6 +194,7 @@ class ChatGPT:
     """
 
     def __init__(
+            # pylint: disable=too-many-locals
             self,
             auth_token: str,
             organization: str,
@@ -600,6 +602,24 @@ class ChatGPT:
         """
         self.___system_settings = value
 
+    @property
+    def logger(self):
+        """
+        Getter for logger.
+
+        :return: The logger object.
+        """
+        return self.___logger
+
+    @logger.setter
+    def logger(self, value):
+        """
+        Setter for logger.
+
+        :param value: The new logger object.
+        """
+        self.___logger = value
+
     async def process_chat(self, prompt, default_choice=None):
         """
         Creates a new chat completion for the provided messages and parameters.
@@ -609,6 +629,7 @@ class ChatGPT:
 
         :return: Returns answers by chunk if 'stream' is false True, otherwise return complete answer.
         """
+        # pylint: disable=too-many-branches
         # Prepare parameters
         params = {
             "model": self.model,

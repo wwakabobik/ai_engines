@@ -5,7 +5,7 @@ Author: Iliya Vereshchagin
 Copyright (c) 2023. All rights reserved.
 
 Created: 25.08.2023
-Last Modified: 25.08.2023
+Last Modified: 26.08.2023
 
 Description:
 This file contains implementation for DALL-E
@@ -138,6 +138,24 @@ class DALLE:
         :param value: The user.
         """
         self.___user = value
+
+    @property
+    def logger(self):
+        """
+        Getter for logger.
+
+        :return: The logger object.
+        """
+        return self.___logger
+
+    @logger.setter
+    def logger(self, value):
+        """
+        Setter for logger.
+
+        :param value: The new logger object.
+        """
+        self.___logger = value
 
     async def create_image(self, prompt):
         """
