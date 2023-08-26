@@ -54,6 +54,7 @@ def record_and_convert_audio(duration: int = 5, frequency_sample: int = 16000):
     return mp3_file
 
 
+# pylint: disable=too-many-instance-attributes
 class AudioRecorder:
     """
     The AudioRecorder class is for managing an instance of the audio recording and conversion process.
@@ -246,7 +247,7 @@ class AudioRecorder:
         :return: The RMS value of the audio frame.
         """
         count = len(frame) / self.___sample_width
-        f_format = "%dh" % count
+        f_format = f"{count}dh"
         shorts = struct.unpack(f_format, frame)
 
         sum_squares = 0.0
