@@ -172,7 +172,6 @@ class AudioRecorder:
         end = time.time() + self.___timeout_length
 
         while current <= end:
-
             data = self.stream.read(self.___chunk)
             if self.rms(data) >= self.___threshold:
                 end = time.time() + self.___timeout_length
