@@ -19,7 +19,6 @@ extend-ignore = """
     F401,
     WPS300,
     WPS412,
-    WPS110,
     DAR301
 """
 
