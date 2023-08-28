@@ -12,6 +12,7 @@ This file is init point for project-wide structure.
 """
 
 # Engines
+from .leonardo_engine.leonardo import Leonardo  # pylint: disable=unused-import
 from .openai_engine.chatgpt import ChatGPT  # pylint: disable=unused-import
 from .openai_engine.dalle import DALLE  # pylint: disable=unused-import
 

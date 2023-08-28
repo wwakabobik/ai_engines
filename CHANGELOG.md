@@ -13,6 +13,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - audio_recorder
 - logger
 - transcriptors
+- translators
 - tts
 
+## [0.2] - 2023-08-28
 
+### Added
+- Leonardo API

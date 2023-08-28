@@ -1,3 +1,4 @@
 - ADD STATISTICS tracking
 - ADD Logger
-- ADD Translator
+- Add more params and fixes
+- Add image handling method (generalistic)
