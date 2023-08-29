@@ -1,10 +1,22 @@
+# -*- coding: utf-8 -*-
+"""
+Filename: chatgpt.py
+Author: Iliya Vereshchagin
+Copyright (c) 2023. All rights reserved.
+
+Created: 29.08.2023
+Last Modified: 29.08.2023
+
+Description:
+This file contains synchronous implementation for Leonardo.ai API
+"""
+
 import json
 import logging
 import os
+import time
 
-import aiofiles
-import aiohttp
-import asyncio
+import requests
 
 
 class Leonardo:
@@ -23,14 +35,15 @@ class Leonardo:
         :param auth_token: Auth Bearer token. Required.
         :param logger: default logger. Default is None.
         """
-        self.___session = aiohttp.ClientSession(headers={"Authorization": f"Bearer {auth_token}"})
+        self.___session = requests.Session()
+        self.___session.headers.update({"Authorization": f"Bearer {auth_token}"})
         self.___logger = logger
         self.___get_headers = {"content-type": "application/json"}
         self.___post_headers = {"accept": "application/json", "content-type": "application/json"}
         if self.___logger:
             self.___logger.debug("Leonardo init complete")
 
-    async def get_user_info(self):
+    def get_user_info(self):
         """
         This endpoint will return your user information, including your user ID.
         """
@@ -38,14 +51,12 @@ class Leonardo:
         if self.___logger:
             self.___logger.debug(f"Requesting user info: GET {url}")
         try:
-            async with self.___session.get(
-                url, headers=self.___session.headers.copy().update(self.___get_headers)
-            ) as response:
-                response.raise_for_status()
-                response = await response.json()
-                if self.___logger:
-                    self.___logger.debug(f"User info: {response}")
-                return response
+            response = self.___session.get(url, headers=self.___session.headers.copy().update(self.___get_headers))
+            response.raise_for_status()
+            response = response.json()
+            if self.___logger:
+                self.___logger.debug(f"User info: {response}")
+            return response
         except Exception as error:
             if self.___logger:
                 self.___logger.error(f"Error occurred while getting user info: {str(error)}")
@@ -122,14 +133,14 @@ class Leonardo:
         if self.___logger:
             self.___logger.debug(f"Requesting post generations: POST {url} with payload: {payload}")
         try:
-            async with self.___session.post(
+            response = self.___session.post(
                 url, json=payload, headers=self.___session.headers.copy().update(self.___post_headers)
-            ) as response:
-                response.raise_for_status()
-                response = await response.json()
-                if self.___logger:
-                    self.___logger.debug(f"Post generations: {response}")
-                return response
+            )
+            response.raise_for_status()
+            response = response.json()
+            if self.___logger:
+                self.___logger.debug(f"Post generations: {response}")
+            return response
         except Exception as error:
             if self.___logger:
                 self.___logger.error(f"Error occurred while post generations: {str(error)}")
@@ -145,14 +156,12 @@ class Leonardo:
         if self.___logger:
             self.___logger.debug(f"Requested single generations: GET {url} with generation_id={generation_id}")
         try:
-            async with self.___session.get(
-                url, headers=self.___session.headers.copy().update(self.___get_headers)
-            ) as response:
-                response.raise_for_status()
-                response = await response.json()
-                if self.___logger:
-                    self.___logger.debug(f"Single generations: {response}")
-                return response
+            response = self.___session.get(url, headers=self.___session.headers.copy().update(self.___get_headers))
+            response.raise_for_status()
+            response = response.json()
+            if self.___logger:
+                self.___logger.debug(f"Single generations: {response}")
+            return response
         except Exception as error:
             if self.___logger:
                 self.___logger.error(f"Error occurred while get single generations: {str(error)}")
@@ -168,14 +177,12 @@ class Leonardo:
         if self.___logger:
             self.___logger.debug(f"Delete generations with generation_id={generation_id}: DELETE {url}")
         try:
-            async with self.___session.delete(
-                url, headers=self.___session.headers.copy().update(self.___get_headers)
-            ) as response:
-                response.raise_for_status()
-                response = await response.json()
-                if self.___logger:
-                    self.___logger.debug(f"Generations {generation_id} has been deleted: {response}")
-                return response
+            response = self.___session.delete(url, headers=self.___session.headers.copy().update(self.___get_headers))
+            response.raise_for_status()
+            response = response.json()
+            if self.___logger:
+                self.___logger.debug(f"Generations {generation_id} has been deleted: {response}")
+            return response
         except Exception as error:
             if self.___logger:
                 self.___logger.error(f"Error occurred while delete generation: {str(error)}")
@@ -194,20 +201,20 @@ class Leonardo:
         if self.___logger:
             self.___logger.debug(f"Requested generations for {user_id} with params {params}: GET {url}")
         try:
-            async with self.___session.get(
+            response = self.___session.get(
                 url, params=params, headers=self.___session.headers.copy().update(self.___get_headers)
-            ) as response:
-                response.raise_for_status()
-                response = await response.json()
-                if self.___logger:
-                    self.___logger.debug(f"Generations for user {user_id} are: {response}")
-                return response
+            )
+            response.raise_for_status()
+            response = response.json()
+            if self.___logger:
+                self.___logger.debug(f"Generations for user {user_id} are: {response}")
+            return response
         except Exception as error:
             if self.___logger:
                 self.___logger.error(f"Error occurred while obtaining user's generations: {str(error)}")
             raise
 
-    async def upload_init_image(self, file_path: str):
+    def upload_init_image(self, file_path: str):
         """
         This endpoint returns presigned details to upload an init image to S3.
 
@@ -223,32 +230,32 @@ class Leonardo:
         if self.___logger:
             self.___logger.debug(f"Init image {file_path} upload requested with payload = {payload}: POST {url}")
         try:
-            async with self.___session.post(
+            response = self.___session.post(
                 url, json=payload, headers=self.___session.headers.copy().update(self.___post_headers)
-            ) as response:
-                response.raise_for_status()
-                data = await response.json()
-                if self.___logger:
-                    self.___logger.debug(f"Init image {file_path} initiated: {data}")
+            )
+            response.raise_for_status()
+            data = response.json()
+            if self.___logger:
+                self.___logger.debug(f"Init image {file_path} initiated: {data}")
 
             upload_url = data["uploadInitImage"]["url"]
             fields = json.loads(data["uploadInitImage"]["fields"])
 
-            async with aiofiles.open(file_path, "rb") as f:
-                file_data = await f.read()
+            with open(file_path, "rb") as f:
+                file_data = f.read()
 
             fields.update({"file": file_data})
 
             if self.___logger:
-                self.___logger.debug(f"Init image {file_path} uploading with as binary: POST {upload_url}")
-            async with self.___session.post(
+                self.___logger.debug(f"Init image {file_path} uploading as binary: POST {upload_url}")
+            response = self.___session.post(
                 upload_url, data=fields, headers=self.___session.headers.copy().update(self.___post_headers)
-            ) as response:
-                response.raise_for_status()
-                response = await response.text()
-                if self.___logger:
-                    self.___logger.debug(f"Init image {file_path} has been uploaded: {response}")
-                return response
+            )
+            response.raise_for_status()
+            response = response.text()
+            if self.___logger:
+                self.___logger.debug(f"Init image {file_path} has been uploaded: {response}")
+            return response
         except Exception as error:
             if self.___logger:
                 self.___logger.error(f"Error occurred while upload init image: {str(error)}")
@@ -264,14 +271,12 @@ class Leonardo:
         if self.___logger:
             self.___logger.debug(f"Requested single image with image_id={image_id}: GET {url}")
         try:
-            async with self.___session.get(
-                url, headers=self.___session.headers.copy().update(self.___get_headers)
-            ) as response:
-                response.raise_for_status()
-                response = await response.json()
-                if self.___logger:
-                    self.___logger.debug(f"Single image provided: {response}")
-                return response
+            response = self.___session.get(url, headers=self.___session.headers.copy().update(self.___get_headers))
+            response.raise_for_status()
+            response = response.json()
+            if self.___logger:
+                self.___logger.debug(f"Single image provided: {response}")
+            return response
         except Exception as error:
             if self.___logger:
                 self.___logger.error(f"Error occurred while obtain single init image: {str(error)}")
@@ -287,14 +292,12 @@ class Leonardo:
         if self.___logger:
             self.___logger.debug(f"Requested to delete single image with image_id={image_id}: DELETE {url}")
         try:
-            async with self.___session.delete(
-                url, headers=self.___session.headers.copy().update(self.___get_headers)
-            ) as response:
-                response.raise_for_status()
-                response = await response.json()
-                if self.___logger:
-                    self.___logger.debug(f"Single image deleted: {response}")
-                return response
+            response = self.___session.delete(url, headers=self.___session.headers.copy().update(self.___get_headers))
+            response.raise_for_status()
+            response = response.json()
+            if self.___logger:
+                self.___logger.debug(f"Single image deleted: {response}")
+            return response
         except Exception as error:
             if self.___logger:
                 self.___logger.error(f"Error occurred while deleting init image: {str(error)}")
@@ -311,14 +314,14 @@ class Leonardo:
         if self.___logger:
             self.___logger.debug(f"Requested to upscale image with payload {payload}: POST {url}")
         try:
-            async with self.___session.post(
+            response = self.___session.post(
                 url, json=payload, headers=self.___session.headers.copy().update(self.___post_headers)
-            ) as response:
-                response.raise_for_status()
-                response = await response.json()
-                if self.___logger:
-                    self.___logger.debug(f"Upscale created: {response}")
-                return response
+            )
+            response.raise_for_status()
+            response = response.json()
+            if self.___logger:
+                self.___logger.debug(f"Upscale created: {response}")
+            return response
         except Exception as error:
             if self.___logger:
                 self.___logger.error(f"Error occurred while upscaling image: {str(error)}")
@@ -334,14 +337,12 @@ class Leonardo:
         if self.___logger:
             self.___logger.debug(f"Requested to obtain variation by id {generation_id}: GET {url}")
         try:
-            async with self.___session.get(
-                url, headers=self.___session.headers.copy().update(self.___get_headers)
-            ) as response:
-                response.raise_for_status()
-                response = await response.json()
-                if self.___logger:
-                    self.___logger.debug(f"Get variation by ID: {response}")
-                return response
+            response = self.___session.get(url, headers=self.___session.headers.copy().update(self.___get_headers))
+            response.raise_for_status()
+            response = response.json()
+            if self.___logger:
+                self.___logger.debug(f"Get variation by ID: {response}")
+            return response
         except Exception as error:
             if self.___logger:
                 self.___logger.error(f"Error occurred while get variation by id: {str(error)}")
@@ -359,14 +360,14 @@ class Leonardo:
         if self.___logger:
             self.___logger.debug(f"Requested to create dataset with payload {payload}: POST {url}")
         try:
-            async with self.___session.post(
+            response = self.___session.post(
                 url, json=payload, headers=self.___session.headers.copy().update(self.___post_headers)
-            ) as response:
-                response.raise_for_status()
-                response = await response.json()
-                if self.___logger:
-                    self.___logger.debug(f"Dataset has been created: {response}")
-                return response
+            )
+            response.raise_for_status()
+            response = response.json()
+            if self.___logger:
+                self.___logger.debug(f"Dataset has been created: {response}")
+            return response
         except Exception as error:
             if self.___logger:
                 self.___logger.error(f"Error occurred while create dataset: {str(error)}")
@@ -382,14 +383,12 @@ class Leonardo:
         if self.___logger:
             self.___logger.debug(f"Requested to obtain dataset dataset_id={dataset_id}: GET {url}")
         try:
-            async with self.___session.get(
-                url, headers=self.___session.headers.copy().update(self.___get_headers)
-            ) as response:
-                response.raise_for_status()
-                response = await response.json()
-                if self.___logger:
-                    self.___logger.debug(f"Dataset with dataset_id={dataset_id} provided: {response}")
-                return response
+            response = self.___session.get(url, headers=self.___session.headers.copy().update(self.___get_headers))
+            response.raise_for_status()
+            response = response.json()
+            if self.___logger:
+                self.___logger.debug(f"Dataset with dataset_id={dataset_id} provided: {response}")
+            return response
         except Exception as error:
             if self.___logger:
                 self.___logger.error(f"Error occurred while get dataset: {str(error)}")
@@ -405,20 +404,18 @@ class Leonardo:
         if self.___logger:
             self.___logger.debug(f"Requested to delete dataset dataset_id={dataset_id}: DELETE {url}")
         try:
-            async with self.___session.delete(
-                url, headers=self.___session.headers.copy().update(self.___get_headers)
-            ) as response:
-                response.raise_for_status()
-                response = await response.json()
-                if self.___logger:
-                    self.___logger.debug(f"Dataset with dataset_id={dataset_id} has been deleted: {response}")
-                return response
+            response = self.___session.delete(url, headers=self.___session.headers.copy().update(self.___get_headers))
+            response.raise_for_status()
+            response = response.json()
+            if self.___logger:
+                self.___logger.debug(f"Dataset with dataset_id={dataset_id} has been deleted: {response}")
+            return response
         except Exception as error:
             if self.___logger:
                 self.___logger.error(f"Error occurred while delete dataset: {str(error)}")
             raise
 
-    async def upload_dataset_image(self, dataset_id: str, file_path: str):
+    def upload_dataset_image(self, dataset_id: str, file_path: str):
         """
         This endpoint returns presigned details to upload a dataset image to S3.
 
@@ -436,36 +433,34 @@ class Leonardo:
         if self.___logger:
             self.___logger.debug(f"Requested to upload dataset_id={dataset_id} from {file_path}: POST {url}")
         try:
-            async with self.___session.post(
+            response = self.___session.post(
                 url, json=payload, headers=self.___session.headers.copy().update(self.___post_headers)
-            ) as response:
-                response.raise_for_status()
-                data = await response.json()
-                if self.___logger:
-                    self.___logger.debug(
-                        f"Dataset with dataset_id={dataset_id} started to upload from {file_path}:" f" {response}"
-                    )
+            )
+            response.raise_for_status()
+            data = response.json()
+            if self.___logger:
+                self.___logger.debug(
+                    f"Dataset with dataset_id={dataset_id} started to upload from {file_path}:" f" {response}"
+                )
 
             upload_url = data["uploadDatasetImage"]["url"]
             fields = json.loads(data["uploadDatasetImage"]["fields"])
 
-            async with aiofiles.open(file_path, "rb") as f:
-                file_data = await f.read()
+            with open(file_path, "rb") as f:
+                file_data = f.read()
 
             fields.update({"file": file_data})
 
             if self.___logger:
                 self.___logger.debug(f"Uploading dataset_id={dataset_id} from {file_path}: POST {url}")
-            async with self.___session.post(
+            response = self.___session.post(
                 upload_url, data=fields, headers=self.___session.headers.copy().update(self.___post_headers)
-            ) as post_response:
-                post_response.raise_for_status()
-                post_response = await response.text()
-                if self.___logger:
-                    self.___logger.debug(
-                        f"Dataset with dataset_id={dataset_id} uploaded using {file_path}:" f" {post_response}"
-                    )
-                return post_response
+            )
+            response.raise_for_status()
+            response = response.text()
+            if self.___logger:
+                self.___logger.debug(f"Dataset with dataset_id={dataset_id} uploaded using {file_path}:" f" {response}")
+            return response
         except Exception as error:
             if self.___logger:
                 self.___logger.error(f"Error occurred uploading dataset: {str(error)}")
@@ -486,17 +481,17 @@ class Leonardo:
                 f"to dataset_id={dataset_id}: POST {url}"
             )
         try:
-            async with self.___session.post(
+            response = self.___session.post(
                 url, json=payload, headers=self.___session.headers.copy().update(self.___post_headers)
-            ) as response:
-                response.raise_for_status()
-                response = await response.json()
-                if self.___logger:
-                    self.___logger.debug(
-                        f"Image with image_id={generated_image_id} has been uploaded to "
-                        f"dataset_id={dataset_id}: {response}"
-                    )
-                return response
+            )
+            response.raise_for_status()
+            response = response.json()
+            if self.___logger:
+                self.___logger.debug(
+                    f"Image with image_id={generated_image_id} has been uploaded to "
+                    f"dataset_id={dataset_id}: {response}"
+                )
+            return response
         except Exception as error:
             if self.___logger:
                 self.___logger.error(f"Error occurred while upload generated image to dataset: {str(error)}")
@@ -542,14 +537,14 @@ class Leonardo:
         if self.___logger:
             self.___logger.debug(f"Requested to train custom model with payload {payload}: POST {url}")
         try:
-            async with self.___session.post(
+            response = self.___session.post(
                 url, json=payload, headers=self.___session.headers.copy().update(self.___post_headers)
-            ) as response:
-                response.raise_for_status()
-                response = await response.text()
-                if self.___logger:
-                    self.___logger.debug(f"Custom modal has been trained: {response}")
-                return response
+            )
+            response.raise_for_status()
+            response = await response.text()
+            if self.___logger:
+                self.___logger.debug(f"Custom modal has been trained: {response}")
+            return response
         except Exception as error:
             if self.___logger:
                 self.___logger.error(f"Error training custom model: {str(error)}")
@@ -565,14 +560,12 @@ class Leonardo:
         if self.___logger:
             self.___logger.debug(f"Requested to obtain custom model by model_id={model_id}: GET {url}")
         try:
-            async with self.___session.get(
-                url, headers=self.___session.headers.copy().update(self.___get_headers)
-            ) as response:
-                response.raise_for_status()
-                response = await response.text()
-                if self.___logger:
-                    self.___logger.debug(f"Custom modal has been trained: {response}")
-                return response
+            response = self.___session.get(url, headers=self.___session.headers.copy().update(self.___get_headers))
+            response.raise_for_status()
+            response = response.text()
+            if self.___logger:
+                self.___logger.debug(f"Custom modal has been trained: {response}")
+            return response
         except Exception as error:
             if self.___logger:
                 self.___logger.error(f"Error obtaining custom model: {str(error)}")
@@ -588,11 +581,9 @@ class Leonardo:
         if self.___logger:
             self.___logger.debug(f"Requested to delete custom model by model_id={model_id}: GET {url}")
         try:
-            async with self.___session.delete(
-                url, headers=self.___session.headers.copy().update(self.___get_headers)
-            ) as response:
-                response.raise_for_status()
-                response = await response.text()
+            response = self.___session.delete(url, headers=self.___session.headers.copy().update(self.___get_headers))
+            response.raise_for_status()
+            response = await response.text()
             if self.___logger:
                 self.___logger.debug(f"Custom modal has been deleted: {response}")
             return response
@@ -619,18 +610,18 @@ class Leonardo:
         while True:
             response = await self.get_single_generation(generation_id)
             generation = response.get("generations_by_pk", {})
-            images = generation.get("generated_images", [])
+            status = generation.get("status")
 
-            if image_index is not None:
-                if image_index >= len(images):
-                    raise IndexError("Incorrect image index")
-                if images[image_index].get("status") == "COMPLETE":
+            if status == "COMPLETE":
+                images = generation.get("generated_images", [])
+                if image_index is not None:
+                    if image_index >= len(images):
+                        raise IndexError("Incorrect image index")
                     return images[image_index]
-            else:
-                if all(image.get("status") == "COMPLETE" for image in images):
+                else:
                     return images
 
-            await asyncio.sleep(poll_interval)
+            time.sleep(poll_interval)
 
             if timeout_counter >= timeout / poll_interval:
                 raise TimeoutError(f"Image has not been generated in {timeout} seconds")
