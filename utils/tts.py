@@ -55,10 +55,19 @@ class CustomTTS:
         self.semaphore = threading.Semaphore(1)
 
     def play_audio(self, audio):
+        """ Service method to play audio in monopoly mode using pydub
+
+        :param audio: AudioSegment needs to be played.
+        """
         playback.play(audio)
         self.semaphore.release()
 
     async def __process_via_gtts(self, text):
+        """
+        Converts text to speach using gtts text-to-speach method
+
+        :param text: Text needs to be converted to speach.
+        """
         temp_dir = tempfile.gettempdir()
         tts = gTTS(text, lang=self.___lang)
         raw_file = f"{temp_dir}/{str(uuid4())}.mp3"

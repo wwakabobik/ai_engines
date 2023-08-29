@@ -853,7 +853,7 @@ class ChatGPT:
 
     async def transcript(self, file, prompt=None, language="en", response_format="text"):
         """
-        Wrapper for the chat function. Returns only the content of the message.
+        Wrapper for the transcribe function. Returns only the content of the message.
 
         :param file: Path with filename to transcript.
         :param prompt: Previous prompt. Default is None.
@@ -878,7 +878,7 @@ class ChatGPT:
 
     async def translate(self, file, prompt=None, response_format="text"):
         """
-        Wrapper for the chat function. Returns only the content of the message.
+        Wrapper for the translate function. Returns only the content of the message.
 
         :param file: Path with filename to transcript.
         :param prompt: Previous prompt. Default is None.
