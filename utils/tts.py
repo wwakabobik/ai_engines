@@ -5,22 +5,21 @@ Author: Iliya Vereshchagin
 Copyright (c) 2023. All rights reserved.
 
 Created: 25.08.2023
-Last Modified: 25.08.2023
+Last Modified: 29.08.2023
 
 Description:
 This module contains implementation for Text-to-Speach tools
 """
 
 import os
+import threading
 import tempfile
 from time import sleep
 from uuid import uuid4
 
 from gtts import gTTS
-from mpyg321.mpyg321 import MPyg321Player
-from mutagen.mp3 import MP3
-from pydub import AudioSegment
 from pyttsx4 import init as pyttsx_init
+from pydub import AudioSegment, playback
 
 
 class CustomTTS:
@@ -48,35 +47,27 @@ class CustomTTS:
         :param voice: default TTS voice to use. Default is 'com.apple.voice.enhanced.ru-RU.Katya'
         """
         self.___method = method
-        self.___player = MPyg321Player()
         self.___pytts = pyttsx_init()
         self.___lang = lang
         self.___voice = voice
         self.___speedup = speedup
         self.___frame = frame
+        self.semaphore = threading.Semaphore(1)
 
-    def __process_via_gtts(self, text):
-        """
-        Converts text to speach using Google text-to-speach method
+    def play_audio(self, audio):
+        playback.play(audio)
+        self.semaphore.release()
 
-        :param text: Text needs to be converted to speach.
-        """
+    async def __process_via_gtts(self, text):
         temp_dir = tempfile.gettempdir()
-        # gtts
         tts = gTTS(text, lang=self.___lang)
         raw_file = f"{temp_dir}/{str(uuid4())}.mp3"
         tts.save(raw_file)
-        audio = AudioSegment.from_file(raw_file, format="mp3")
-        new = audio.speedup(self.___speedup)
+        audio = AudioSegment.from_file(raw_file, format="mp3").speedup(self.___speedup)
         os.remove(raw_file)
-        response_file = f"{temp_dir}/{str(uuid4())}.mp3"
-        new.export(response_file, format="mp3")
-        # player
-        self.___player.play_song(response_file)
-        audio = MP3(response_file)
-        sleep(audio.info.length)
-        self.___player.stop()
-        os.remove(response_file)
+        self.semaphore.acquire()
+        player_thread = threading.Thread(target=self.play_audio, args=(audio,))
+        player_thread.start()
 
     def __process_via_pytts(self, text):
         """
@@ -94,6 +85,7 @@ class CustomTTS:
             sleep(self.___frame)
 
         engine.endLoop()
+        self.semaphore.release()
 
     def get_pytts_voices_list(self):
         """
@@ -110,6 +102,8 @@ class CustomTTS:
         :param text: Text needs to be converted to speach.
         """
         if "google" in self.___method:
-            self.__process_via_gtts(text)
+            await self.__process_via_gtts(text)
         else:
-            self.__process_via_pytts(text)
+            self.semaphore.acquire()
+            player_thread = threading.Thread(target=self.__process_via_pytts, args=(text,))
+            player_thread.start()
