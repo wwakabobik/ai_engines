@@ -62,7 +62,7 @@ class Leonardo:
                 self.___logger.error(f"Error occurred while getting user info: {str(error)}")
             raise
 
-    async def post_generations(
+    def post_generations(
         self,
         prompt: str,
         negative_prompt: str = None,
@@ -146,7 +146,7 @@ class Leonardo:
                 self.___logger.error(f"Error occurred while post generations: {str(error)}")
             raise
 
-    async def get_single_generation(self, generation_id: str):
+    def get_single_generation(self, generation_id: str):
         """
         This endpoint will provide information about a specific generation.
 
@@ -167,7 +167,7 @@ class Leonardo:
                 self.___logger.error(f"Error occurred while get single generations: {str(error)}")
             raise
 
-    async def delete_single_generation(self, generation_id: str):
+    def delete_single_generation(self, generation_id: str):
         """
         This endpoint deletes a specific generation.
 
@@ -188,7 +188,7 @@ class Leonardo:
                 self.___logger.error(f"Error occurred while delete generation: {str(error)}")
             raise
 
-    async def get_generations_by_user(self, user_id: str, offset: int = 0, limit: int = 10):
+    def get_generations_by_user(self, user_id: str, offset: int = 0, limit: int = 10):
         """
         This endpoint returns all generations by a specific user.
 
@@ -261,7 +261,7 @@ class Leonardo:
                 self.___logger.error(f"Error occurred while upload init image: {str(error)}")
             raise
 
-    async def get_single_init_image(self, image_id: str):
+    def get_single_init_image(self, image_id: str):
         """
         This endpoint will return a single init image.
 
@@ -282,7 +282,7 @@ class Leonardo:
                 self.___logger.error(f"Error occurred while obtain single init image: {str(error)}")
             raise
 
-    async def delete_init_image(self, image_id: str):
+    def delete_init_image(self, image_id: str):
         """
         This endpoint deletes an init image.
 
@@ -303,7 +303,7 @@ class Leonardo:
                 self.___logger.error(f"Error occurred while deleting init image: {str(error)}")
             raise
 
-    async def create_upscale(self, image_id: str):
+    def create_upscale(self, image_id: str):
         """
         This endpoint will create an upscale for the provided image ID.
 
@@ -327,7 +327,7 @@ class Leonardo:
                 self.___logger.error(f"Error occurred while upscaling image: {str(error)}")
             raise
 
-    async def get_variation_by_id(self, generation_id: str):
+    def get_variation_by_id(self, generation_id: str):
         """
         This endpoint will get the variation by ID.
 
@@ -348,7 +348,7 @@ class Leonardo:
                 self.___logger.error(f"Error occurred while get variation by id: {str(error)}")
             raise
 
-    async def create_dataset(self, name: str, description: str = None):
+    def create_dataset(self, name: str, description: str = None):
         """
         This endpoint creates a new dataset.
 
@@ -373,7 +373,7 @@ class Leonardo:
                 self.___logger.error(f"Error occurred while create dataset: {str(error)}")
             raise
 
-    async def get_dataset_by_id(self, dataset_id: str):
+    def get_dataset_by_id(self, dataset_id: str):
         """
         This endpoint gets the specific dataset.
 
@@ -394,7 +394,7 @@ class Leonardo:
                 self.___logger.error(f"Error occurred while get dataset: {str(error)}")
             raise
 
-    async def delete_dataset_by_id(self, dataset_id: str):
+    def delete_dataset_by_id(self, dataset_id: str):
         """
         This endpoint deletes the specific dataset.
 
@@ -466,7 +466,7 @@ class Leonardo:
                 self.___logger.error(f"Error occurred uploading dataset: {str(error)}")
             raise
 
-    async def upload_generated_image_to_dataset(self, dataset_id: str, generated_image_id: str):
+    def upload_generated_image_to_dataset(self, dataset_id: str, generated_image_id: str):
         """
         This endpoint will upload a previously generated image to the dataset.
 
@@ -497,7 +497,7 @@ class Leonardo:
                 self.___logger.error(f"Error occurred while upload generated image to dataset: {str(error)}")
             raise
 
-    async def train_custom_model(
+    def train_custom_model(
         self,
         name: str,
         dataset_id: str,
@@ -541,7 +541,7 @@ class Leonardo:
                 url, json=payload, headers=self.___session.headers.copy().update(self.___post_headers)
             )
             response.raise_for_status()
-            response = await response.text()
+            response = response.text()
             if self.___logger:
                 self.___logger.debug(f"Custom modal has been trained: {response}")
             return response
@@ -550,7 +550,7 @@ class Leonardo:
                 self.___logger.error(f"Error training custom model: {str(error)}")
             raise
 
-    async def get_custom_model_by_id(self, model_id: str):
+    def get_custom_model_by_id(self, model_id: str):
         """
         This endpoint gets the specific custom model.
 
@@ -571,7 +571,7 @@ class Leonardo:
                 self.___logger.error(f"Error obtaining custom model: {str(error)}")
             raise
 
-    async def delete_custom_model_by_id(self, model_id: str):
+    def delete_custom_model_by_id(self, model_id: str):
         """
         This endpoint will delete a specific custom model.
 
@@ -583,7 +583,7 @@ class Leonardo:
         try:
             response = self.___session.delete(url, headers=self.___session.headers.copy().update(self.___get_headers))
             response.raise_for_status()
-            response = await response.text()
+            response = response.text()
             if self.___logger:
                 self.___logger.debug(f"Custom modal has been deleted: {response}")
             return response
@@ -592,7 +592,7 @@ class Leonardo:
                 self.___logger.error(f"Error delete custom model: {str(error)}")
             raise
 
-    async def wait_for_image_generation(self, generation_id, image_index=None, poll_interval=5, timeout=120):
+    def wait_for_image_generation(self, generation_id, image_index=None, poll_interval=5, timeout=120):
         """
         This method waits for the completion of image generation.
 
@@ -608,7 +608,7 @@ class Leonardo:
         """
         timeout_counter = 0
         while True:
-            response = await self.get_single_generation(generation_id)
+            response = self.get_single_generation(generation_id)
             generation = response.get("generations_by_pk", {})
             status = generation.get("status")
 

@@ -695,7 +695,6 @@ class ChatGPT:
                                 func_call[key] = value
                     if chunk["choices"][default_choice]["finish_reason"] is not None:
                         if chunk["choices"][default_choice]["finish_reason"] == 'function_call':
-                            print(func_call)
                             func_response = await self.process_function(function_call=func_call)
                         break
                     if "content" in chunk["choices"][default_choice]["delta"]:
