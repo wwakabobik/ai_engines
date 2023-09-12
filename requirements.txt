@@ -18,5 +18,5 @@ soundfile==0.12.1
 numpy==1.25.2
 # Image
 pillow==10.0.0
-# Leonardo
-aiofiles==23.2.1
+# Artuicles
+readability==0.3.1
