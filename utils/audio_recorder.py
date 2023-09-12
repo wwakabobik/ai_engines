@@ -246,6 +246,7 @@ class AudioRecorder:
         :return: The RMS value of the audio frame.
         """
         count = len(frame) / self.___sample_width
+        # pylint: disable=C0209
         f_format = "%dh" % count
         shorts = struct.unpack(f_format, frame)
 

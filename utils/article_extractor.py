@@ -18,6 +18,15 @@ from readability import Document
 
 
 def get_content(url):
+    """
+    This function extracts content from internet page.
+    Args:
+        url: URL of internet page.
+
+    Returns:
+        Content of internet page.
+
+    """
     session = requests.Session()
     response = session.get(url)
     doc = Document(response.text)
