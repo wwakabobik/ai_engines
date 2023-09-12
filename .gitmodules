@@ -1,0 +1,3 @@
+[submodule "leonardo_api"]
+	path = leonardo_api
+	url = git@github.com:wwakabobik/leonardo_api.git
