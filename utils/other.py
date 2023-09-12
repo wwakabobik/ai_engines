@@ -1,4 +1,15 @@
-""" This file contains several other stuff. """
+# -*- coding: utf-8 -*-
+"""
+Filename: other.py
+Author: Iliya Vereshchagin
+Copyright (c) 2023. All rights reserved.
+
+Created: 25.08.2023
+Last Modified: 25.08.2023
+
+Description:
+This file contains several other stuff.
+"""
 
 import os
 

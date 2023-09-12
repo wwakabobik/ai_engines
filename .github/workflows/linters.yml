@@ -13,24 +13,26 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        python-version: ["3.8", "3.9", "3.10", "3.11.4"]
+        python-version: ["3.9", "3.10", "3.11.5"]
     steps:
     - name: Checkout
       uses: actions/checkout@v3
       with:
         fetch-depth: 0
     - name: Set up Python ${{ matrix.python-version }}
-      uses: actions/setup-python@v3
+      uses: actions/setup-python@v4
       with:
         python-version: ${{ matrix.python-version }}
     - name: Install dependencies
       run: |
+        sudo apt-get install libjack-jackd2-dev portaudio19-dev
         python -m pip install --upgrade pip
         pip install -r requirements.txt
         pip install pylint reorder-python-imports
         pip install mypy reorder-python-imports
         pip install wemake-python-styleguide reorder-python-imports
         pip install black reorder-python-imports
+
     - name: Analysing the code with pylint
       id: pylint
       continue-on-error: true
@@ -81,7 +83,7 @@ jobs:
         fi
     - name: Check runner state
       run: |
-        if [[ "${{ steps.pylint.outcome }}" == "failure" || "${{ steps.black.outcome }}" == "failure" ]] || "${{ steps.mypy.outcome }}" == "failure" ]]; then
+        if [[ "${{ steps.pylint.outcome }}" == "failure" || "${{ steps.black.outcome }}" == "failure" || "${{ steps.mypy.outcome }}" == "failure" ]]; then
           echo "Linters failed, refer to related sections for info"
           exit 1
         fi

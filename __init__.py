@@ -1,12 +1,24 @@
+# -*- coding: utf-8 -*-
+"""
+Filename: __main__.py
+Author: Iliya Vereshchagin
+Copyright (c) 2023. All rights reserved.
+
+Created: 25.08.2023
+Last Modified: 12.09.2023
+
+Description:
+This file is init point for project-wide structure.
+"""
+
 # Engines
-from .testrail_api_reporter.engines.at_coverage_reporter import ATCoverageReporter
-from .testrail_api_reporter.engines.results_reporter import TestRailResultsReporter
-from .testrail_api_reporter.engines.plotly_reporter import PlotlyReporter
-from .testrail_api_reporter.engines.case_backup import TCBackup
-# Publishers
-from .testrail_api_reporter.publishers.confluence_sender import ConfluenceSender
-from .testrail_api_reporter.publishers.email_sender import EmailSender
-from .testrail_api_reporter.publishers.slack_sender import SlackSender
-from .testrail_api_reporter.publishers.gdrive_uploader import GoogleDriveUploader
+from .openai_api.src.openai_api.chatgpt import ChatGPT  # pylint: disable=unused-import
+from .openai_api.src.openai_api.dalle import DALLE  # pylint: disable=unused-import
+
 # Utils
-from .testrail_api_reporter.utils.reporter_utils import upload_image, zip_file, delete_file
+from .utils.tts import CustomTTS  # pylint: disable=unused-import
+from .utils.transcriptors import CustomTranscriptor  # pylint: disable=unused-import
+from .utils.translators import CustomTranslator  # pylint: disable=unused-import
+from .utils.audio_recorder import AudioRecorder, record_and_convert_audio  # pylint: disable=unused-import
+from .utils.logger_config import setup_logger  # pylint: disable=unused-import
+from .utils.other import is_heroku_environment  # pylint: disable=unused-import

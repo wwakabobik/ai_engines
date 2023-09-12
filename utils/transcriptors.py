@@ -1,5 +1,15 @@
-""" This module contains implementation for Custom Transcriptor """
 # -*- coding: utf-8 -*-
+"""
+Filename: transcriptors.py
+Author: Iliya Vereshchagin
+Copyright (c) 2023. All rights reserved.
+
+Created: 25.08.2023
+Last Modified: 25.08.2023
+
+Description:
+This module contains implementation for Custom Transcriptor
+"""
 
 import speech_recognition as sr
 
@@ -44,7 +54,8 @@ class CustomTranscriptor:
         :return: transcripted text (string).
         """
         print("Listening beginning...")
-        audio = self.___recognizer.listen(self.___source, timeout=5)
+        with self.___source as source:
+            audio = self.___recognizer.listen(source, timeout=5)
 
         user_input = None
         try:
