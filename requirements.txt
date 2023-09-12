@@ -1,6 +1,3 @@
-aiohttp==3.8.5
-# OpenAI
-openai==0.28.0
 # TTS
 gtts==2.3.2
 pyttsx4==3.0.15
@@ -18,5 +15,5 @@ soundfile==0.12.1
 numpy==1.25.2
 # Image
 pillow==10.0.0
-# Artuicles
+# Articles
 readability==0.3.1

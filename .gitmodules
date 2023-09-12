@@ -1,3 +1,6 @@
 [submodule "leonardo_api"]
 	path = leonardo_api
 	url = git@github.com:wwakabobik/leonardo_api.git
+[submodule "openai_api"]
+	path = openai_api
+	url = git@github.com:wwakabobik/openai_api.git

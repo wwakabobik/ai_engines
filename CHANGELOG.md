@@ -8,15 +8,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [0.1] - 2023-08-25
 
 ### Added
-- ChatGPT engine
-- DALL-E engine
+
 - audio_recorder
 - logger
 - transcriptors
 - translators
 - tts
-
-## [0.2] - 2023-08-28
-
-### Added
+- OpenAI API
 - Leonardo API
+
+

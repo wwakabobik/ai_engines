@@ -1,0 +1,3 @@
+- Add more params and fixes
+- Add image handling methods (generalistic)
+- Rework as pypi package
