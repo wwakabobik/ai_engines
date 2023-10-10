@@ -14,6 +14,6 @@ sounddevice==0.4.6
 soundfile==0.12.1
 numpy==1.26.0
 # Image
-pillow==10.0.0
+pillow==10.0.1
 # Articles
 readability==0.3.1
