@@ -1,15 +1,25 @@
+"""This module runs pytest and returns the results in JSON format."""
 import json
 import pytest
 from pytest_jsonreport.plugin import JSONReport
 
 
 def run_tests(test_files):
+    """
+    Run tests and return results in JSON format.
+
+    Args:
+        test_files: string with test files.
+
+    Returns:
+        JSON with results.
+
+    """
     pytest.main(["-q", "--json-report", "--json-report-file=test_report.json"] + test_files)
 
     with open('test_report.json', encoding='utf-8') as json_file:
         data = json.load(json_file)
 
-    # Форматируем результаты
     results = {
         "passed": [],
         "failed": [],

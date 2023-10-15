@@ -1,3 +1,4 @@
+""" Module for generating test files and page objects from json data."""
 import os
 
 from urllib.parse import urlparse, unquote

@@ -1,3 +1,4 @@
+"""PageRetriever class for extracting the page content from the url."""
 import re
 import time
 
