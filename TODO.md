@@ -1,3 +1,4 @@
-- Add more params and fixes
-- Add image handling methods (generalistic)
-- Rework as pypi package
+- Lint!
+- Prettify projects
+- Add & finalize testing project
+- Refactor utils to Classes

@@ -18,3 +18,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Leonardo API
 
 
+## [0.2] - 2023-10-15
+
+### Changed
+- Bumped submodules to latest versions
+- Added test project
+- Structure refactoring
