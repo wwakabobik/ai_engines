@@ -60,7 +60,7 @@ class PomTestCaseGenerator:
             test_file.write('import pytest\n\n')
             test_file.write(f'from {pom_folder}.{os.path.splitext(f"page_{file_name}")[0]} import Page'
                             f'{"".join(word.capitalize() for word in file_name.split("_"))}\n\n\n')
-            test_file.write('@pytest.fixture(scope="module")\n')
+            test_file.write('@pytest.fixture(scope="function")\n')
             test_file.write('def page(driver):\n')
             test_file.write(f'    page_under_test = Page{"".join(word.capitalize() for word in file_name.split("_"))}(driver)\n')
             test_file.write(f'    driver.get(page_under_test.url)\n')
@@ -68,16 +68,18 @@ class PomTestCaseGenerator:
             for test in tests:
                 test_file.write(f'{test}\n\n\n')
 
-    def create_files_from_json(self, json_data, url=''):
+    def create_files_from_json(self, json_data, url='', pom_folder='pom', tests_folder='tests'):
         """
         Create test and page object model files from json data.
 
         :param json_data: JSON data.
         :param url: URL of the page.
+        :param pom_folder: Folder for page object model files.
+        :param tests_folder: Folder for test files.
         """
         if not url:
             url = self.url
         parsed_url = urlparse(unquote(url))
         file_name = parsed_url.path.strip('/').replace('/', '_') or 'index'
-        self.___create_test_file(file_name, json_data['tests'], pom_folder='..pom')
-        self.___create_pom_file(file_name, json_data['page_objects'], url)
+        self.___create_test_file(file_name, json_data['tests'], pom_folder=f"..pom", tests_folder=tests_folder)
+        self.___create_pom_file(file_name, json_data['page_objects'], url, pom_folder=pom_folder)

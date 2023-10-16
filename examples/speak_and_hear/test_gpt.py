@@ -20,8 +20,8 @@ from utils.audio_recorder import AudioRecorder
 from utils.transcriptors import CustomTranscriptor
 from utils.tts import CustomTTS
 
-from creds import oai_token, oai_organization
-from openai_api.src.openai_api.chatgpt import ChatGPT
+from ..creds import oai_token, oai_organization
+from ...openai_api import ChatGPT
 
 
 gpt = ChatGPT(auth_token=oai_token, organization=oai_organization, model="gpt-3.5-turbo")

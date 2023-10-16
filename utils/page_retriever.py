@@ -8,6 +8,7 @@ from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.by import By
+from selenium.webdriver.chrome.service import Service as ChromeService
 from webdriver_manager.chrome import ChromeDriverManager
 
 
@@ -21,7 +22,9 @@ class PageRetriever:
         """
         options = Options()
         options.add_argument("--headless")
-        self.driver = webdriver.Chrome(ChromeDriverManager().install(), options=options)
+        options.headless = True
+        path = ChromeDriverManager().install()
+        self.driver = webdriver.Chrome(service=ChromeService(executable_path=path), options=options)
         self.url = url
 
     def set_url(self, url):
@@ -32,28 +35,37 @@ class PageRetriever:
         """
         self.url = url
 
-    def get_page(self):
+    def get_page(self, url=None):
         """
         Get the page content from the url.
 
+        :param url: URL of the page.
         :returns: HTML content of the page.
         """
+        if url:
+            self.set_url(url)
         return self.get_page_content(self.url)
 
-    def get_body(self):
+    def get_body(self, url=None):
         """
         Get the body content of the page.
 
+        :param url: URL of the page.
         :returns: Body content of the page.
         """
+        if url:
+            self.set_url(url)
         return self.extract_body_content(self.get_page())
 
-    def get_body_without_scripts(self):
+    def get_body_without_scripts(self, url=None):
         """
         Get the body content of the page without <script>...</script> tags.
 
+        :param url: URL of the page.
         :returns: Body content of the page without <script>...</script> tags.
         """
+        if url:
+            self.set_url(url)
         return self.remove_script_tags(self.get_body())
 
     def get_page_content(self, url):
@@ -73,10 +85,11 @@ class PageRetriever:
                 "return window.performance.getEntriesByType('resource').filter(item => "
                 "item.initiatorType == 'xmlhttprequest' && item.duration == 0)"
             )
-            if not network_activity or time.time() - start_time > 30:  # Таймаут в 30 секунд
+            if not network_activity or time.time() - start_time > 30:
                 break
 
         content = self.driver.page_source
+        self.driver.close()
         self.driver.quit()
 
         return content

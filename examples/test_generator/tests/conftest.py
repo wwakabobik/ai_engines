@@ -1,21 +1,30 @@
+from time import sleep
+
 import pytest
 
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
+from selenium.webdriver.chrome.service import Service as ChromeService
 from webdriver_manager.chrome import ChromeDriverManager
+
+
+def pytest_runtest_makereport(item, call):
+    if "driver" in item.fixturenames:
+        web_driver = item.funcargs["driver"]
+        if call.when == "call" and call.excinfo is not None:
+            with open(f"{item.nodeid.split('::')[1]}.html", "w", encoding="utf-8") as file:
+                file.write(web_driver.page_source)
 
 
 @pytest.fixture
 def driver(request):
     options = Options()
     options.add_argument("--headless")
-    _driver = webdriver.Chrome(ChromeDriverManager().install(), options=options)
+    options.headless = True
+    path = ChromeDriverManager().install()
+    _driver = webdriver.Chrome(service=ChromeService(executable_path=path, options=options), options=options)
 
-    def save_page_source_on_failure():
-        if request.node.rep_call.failed or request.node.rep_call.error:
-            page_html = _driver.page_source
-            request.node.user_properties.append(("page_html", page_html))
+    yield _driver
 
-    request.addfinalizer(save_page_source_on_failure)
-
-    return _driver
+    _driver.close()
+    _driver.quit()
