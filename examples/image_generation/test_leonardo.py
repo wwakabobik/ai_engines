@@ -13,7 +13,7 @@ This file contains testing procedures for Leonardo experiments
 import asyncio
 import json
 
-from leonardo_api import LeonardoAsync as Leonardo
+from leonardo_api.src.leonardo_api.leonardo_async import Leonardo
 
 
 async def main():

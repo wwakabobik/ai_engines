@@ -99,7 +99,7 @@ async def tts_sentence_task():
             if sentence[-1] in punctuation_marks:
                 await tts_queue.put(sentence)
                 sentence = ""
-        except Exception as error:
+        except Exception:  # pylint: disable=broad-except
             pass
 
 
@@ -111,7 +111,7 @@ async def tts_worker():
             if sentence:
                 await tts.process(sentence)
                 tts_queue.task_done()
-        except Exception as error:
+        except Exception:  # pylint: disable=broad-except
             pass
 
 
@@ -122,8 +122,7 @@ async def get_user_input():
             user_input = input()
             if user_input.lower() == "[done]":
                 break
-            else:
-                await ask_chat(user_input)
+            await ask_chat(user_input)
         except KeyboardInterrupt:
             break
 
@@ -142,12 +141,11 @@ async def main():
                     transcript = await gpt.transcript(file=f, language="en")
             else:
                 transcript = CustomTranscriptor(language="en-US").transcript()
-                pass
             if transcript:
                 print(f"User: {transcript}")
                 # translate = CustomTranslator(source='ru', target='en').translate(transcript)
                 # print(translate)
-                response = await ask_chat(transcript)
+                await ask_chat(transcript)
         except KeyboardInterrupt:
             break
 
