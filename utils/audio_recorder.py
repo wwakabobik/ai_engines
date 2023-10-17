@@ -5,13 +5,12 @@ Author: Iliya Vereshchagin
 Copyright (c) 2023. All rights reserved.
 
 Created: 25.08.2023
-Last Modified: 26.08.2023
+Last Modified: 17.10.2023
 
 Description:
 This file contains implementation for Audio Recorder
 """
 
-import math
 import os
 import struct
 import tempfile
@@ -19,6 +18,7 @@ import time
 import uuid
 import wave
 
+import math
 import pyaudio
 import sounddevice as sd
 import soundfile as sf
@@ -33,8 +33,8 @@ def record_and_convert_audio(duration: int = 5, frequency_sample: int = 16000):
     The audio is then saved as a temporary .wav file, converted to .mp3 format, and the .wav file is deleted.
     The function returns the path to the .mp3 file.
 
-    :param duration: The duration of the audio recording in seconds. Default is 5 seconds.
-    :param frequency_sample: The frequency sample rate of the audio recording. Default is 16000 Hz.
+    :param duration: (int) The duration of the audio recording in seconds. Default is 5 seconds.
+    :param frequency_sample: (int) The frequency sample rate of the audio recording. Default is 16000 Hz.
 
     :return: The path to the saved .mp3 file.
     """

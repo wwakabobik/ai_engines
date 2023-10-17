@@ -10,7 +10,7 @@ class PomTestCaseGenerator:
         """
         General init.
 
-        :param url: URL of the page.
+        :param url: (str) URL of the page.
         """
         self.url = url
 
@@ -18,7 +18,7 @@ class PomTestCaseGenerator:
         """
         Set the url.
 
-        :param url: URL of the page.
+        :param url: (str) URL of the page.
         """
         self.url = url
 
@@ -26,10 +26,10 @@ class PomTestCaseGenerator:
         """
         Create page object model file.
 
-        :param file_name: Name of the file.
-        :param page_objects: List of page objects.
-        :param url: URL of the page.
-        :param pom_folder: Folder for page object model files.
+        :param file_name: (str) Name of the file.
+        :param page_objects: (list) List of page objects.
+        :param url: (str) URL of the page.
+        :param pom_folder: (str) Folder for page object model files.
         """
         if not url:
             url = self.url
@@ -51,10 +51,10 @@ class PomTestCaseGenerator:
         """
         Create test file.
 
-        :param file_name: Name of the file.
-        :param tests: List of tests.
-        :param pom_folder: Folder for page object model files.
-        :param tests_folder: Folder for test files.
+        :param file_name: (str) Name of the file.
+        :param tests: (list) List of tests.
+        :param pom_folder: (str) Folder for page object model files.
+        :param tests_folder: (str) Folder for test files.
         """
         with open(f'{tests_folder}/test_{file_name}.py', 'w') as test_file:
             test_file.write('import pytest\n\n')
@@ -72,10 +72,10 @@ class PomTestCaseGenerator:
         """
         Create test and page object model files from json data.
 
-        :param json_data: JSON data.
-        :param url: URL of the page.
-        :param pom_folder: Folder for page object model files.
-        :param tests_folder: Folder for test files.
+        :param json_data: (str) JSON data.
+        :param url: (str) URL of the page.
+        :param pom_folder: (str) Folder for page object model files.
+        :param tests_folder: (str) Folder for test files.
         """
         if not url:
             url = self.url

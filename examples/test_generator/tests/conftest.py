@@ -1,5 +1,15 @@
-from time import sleep
+# -*- coding: utf-8 -*-
+"""
+Filename: conftest.py
+Author: Iliya Vereshchagin
+Copyright (c) 2023. All rights reserved.
 
+Created: 15.10.2023
+Last Modified: 17.10.2023
+
+Description:
+This file contains pytest fixtures for tests
+"""
 import pytest
 
 from selenium import webdriver
@@ -9,6 +19,12 @@ from webdriver_manager.chrome import ChromeDriverManager
 
 
 def pytest_runtest_makereport(item, call):
+    """
+    Pytest hook for saving html page on test failure
+
+    :param item: pytest item
+    :param call: pytest call
+    """
     if "driver" in item.fixturenames:
         web_driver = item.funcargs["driver"]
         if call.when == "call" and call.excinfo is not None:
@@ -17,7 +33,12 @@ def pytest_runtest_makereport(item, call):
 
 
 @pytest.fixture
-def driver(request):
+def driver():
+    """
+    Pytest fixture for selenium webdriver
+
+    :return: webdriver
+    """
     options = Options()
     options.add_argument("--headless")
     options.headless = True

@@ -1,29 +1,28 @@
 # -*- coding: utf-8 -*-
 """
-Filename: __generator_test__.py
+Filename: generator_test.py
 Author: Iliya Vereshchagin
 Copyright (c) 2023. All rights reserved.
 
 Created: 16.10.2023
-Last Modified: 16.10.2023
+Last Modified: 17.10.2023
 
 Description:
-This file contains testing procedures for ChatGPt experiments
+This file contains testing procedures for ChatGPT experiments
 """
 
+import asyncio
 import json
 import logging
 
-import asyncio
-
+from examples.creds import oai_token, oai_organization
+from examples.test_generator.gpt_functions import gpt_functions, gpt_functions_dict
+from examples.test_generator.pom_case_generator import PomTestCaseGenerator
 from openai_api.src.openai_api import ChatGPT
 from openai_api.src.openai_api.logger_config import setup_logger
-from examples.creds import oai_token, oai_organization
-from examples.test_generator.pom_case_generator import PomTestCaseGenerator
-from examples.test_generator.gpt_functions import gpt_functions, gpt_functions_dict
 
-generator = PomTestCaseGenerator(url='https://www.saucedemo.com/')
-#generator = PomTestCaseGenerator(url='https://automationintesting.com/selenium/testpage/')
+generator = PomTestCaseGenerator(url="https://www.saucedemo.com/")
+# generator = PomTestCaseGenerator(url='https://automationintesting.com/selenium/testpage/')
 
 
 system_instructions = """
@@ -66,30 +65,32 @@ def setup_gpt():
     gpt.logger = setup_logger("gpt", "gpt.log", logging.INFO)
     gpt.system_settings = ""
     gpt.function_dict = gpt_functions_dict
-    gpt.function_call = 'auto'
+    gpt.function_call = "auto"
     gpt.functions = gpt_functions
     gpt.system_settings = system_instructions
     return gpt
 
 
 async def main():
+    """Main function for testing GPT bot"""
     print("===Setup GPT bot===")
     gpt = setup_gpt()
     print("===Get page code of https://www.saucedemo.com/ and generate POM and tests===")
     response = await anext(gpt.str_chat("Get page code of https://www.saucedemo.com/ and generate POM and tests"))
     print(response)
-    response = response.replace('\n', '')
-    generator.create_files_from_json(json.loads(response),
-                                     pom_folder='examples/test_generator/pom',
-                                     tests_folder='examples/test_generator/tests')
+    response = response.replace("\n", "")
+    generator.create_files_from_json(
+        json.loads(response), pom_folder="examples/test_generator/pom", tests_folder="examples/test_generator/tests"
+    )
     print("===Get tests results for examples/test_generator/tests/test_index.py==")
     response = await anext(gpt.str_chat("Get tests results for examples/test_generator/tests/test_index.py"))
     print(response)
     print("===If there are failures in code, please fix it by fixing POM and tests===")
     response = await anext(gpt.str_chat("If there are failures in code, please fix it by fixing POM and tests"))
     print(response)
-    generator.create_files_from_json(json.loads(response),
-                                     pom_folder='..pom',
-                                     tests_folder='examples/test_generator/tests')
+    generator.create_files_from_json(
+        json.loads(response), pom_folder="..pom", tests_folder="examples/test_generator/tests"
+    )
+
 
 asyncio.run(main())

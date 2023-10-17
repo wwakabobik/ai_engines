@@ -14,7 +14,7 @@ This file contains testing procedures for ChatGPt experiments
 from examples.test_generator.pytest_runner import run_tests
 from utils.page_retriever import PageRetriever
 
-doc_engine = PageRetriever("https://wwakabobik.github.io/")
+doc_engine = PageRetriever()
 gpt_functions = [
     {
         "name": "get_page_code",

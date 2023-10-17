@@ -1,24 +1,36 @@
-"""PageRetriever class for extracting the page content from the url."""
+# -*- coding: utf-8 -*-
+"""
+Filename: page_retriever.py
+Author: Iliya Vereshchagin
+Copyright (c) 2023. All rights reserved.
+
+Created: 30.09.2023
+Last Modified: 17.10.2023
+
+Description:
+This module contains implementation for PageRetriever
+"""
 import re
 import time
 
 from bs4 import BeautifulSoup
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
-from selenium.webdriver.common.by import By
 from selenium.webdriver.chrome.service import Service as ChromeService
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.support.ui import WebDriverWait
 from webdriver_manager.chrome import ChromeDriverManager
 
 
 class PageRetriever:
     """The PageRetriever class is for managing an instance of the PageRetriever."""
-    def __init__(self, url=''):
+
+    def __init__(self, url=""):
         """
         General init.
 
-        :param url: URL of the page.
+        :param url: (str) URL of the page.
         """
         options = Options()
         options.add_argument("--headless")
@@ -31,7 +43,7 @@ class PageRetriever:
         """
         Set the url.
 
-        :param url: URL of the page.
+        :param url: (str) URL of the page.
         """
         self.url = url
 
@@ -39,8 +51,8 @@ class PageRetriever:
         """
         Get the page content from the url.
 
-        :param url: URL of the page.
-        :returns: HTML content of the page.
+        :param url: (str) URL of the page.
+        :return: (str) HTML content of the page.
         """
         if url:
             self.set_url(url)
@@ -50,8 +62,8 @@ class PageRetriever:
         """
         Get the body content of the page.
 
-        :param url: URL of the page.
-        :returns: Body content of the page.
+        :param url: (str) URL of the page.
+        :return: (str) Body content of the page.
         """
         if url:
             self.set_url(url)
@@ -61,8 +73,9 @@ class PageRetriever:
         """
         Get the body content of the page without <script>...</script> tags.
 
-        :param url: URL of the page.
-        :returns: Body content of the page without <script>...</script> tags.
+        :param url: (str) URL of the page.
+
+        :return: (str) Body content of the page without <script>...</script> tags.
         """
         if url:
             self.set_url(url)
@@ -72,12 +85,13 @@ class PageRetriever:
         """
         Get the page content from the url.
 
-        :param url: URL of the page.
-        :returns: HTML content of the page.
+        :param url: (str) URL of the page.
+
+        :return: (str) HTML content of the page.
         """
         self.driver.get(url)
 
-        WebDriverWait(self.driver, 10).until(EC.presence_of_element_located((By.TAG_NAME, 'body')))
+        WebDriverWait(self.driver, 10).until(EC.presence_of_element_located((By.TAG_NAME, "body")))
 
         start_time = time.time()
         while True:
@@ -99,10 +113,11 @@ class PageRetriever:
         """
         Extract the body content from the html_content.
 
-        :param html_content: HTML content of the page.
-        :returns: Body content of the page.
+        :param html_content: (str) HTML content of the page.
+
+        :return: (str) Body content of the page.
         """
-        soup = BeautifulSoup(html_content, 'html.parser')
+        soup = BeautifulSoup(html_content, "html.parser")
         body_content = soup.body
 
         return str(body_content)
@@ -112,11 +127,12 @@ class PageRetriever:
         """
         Remove all <script>...</script> tags from the input_content.
 
-        :param input_content: HTML content of the page.
-        :returns: Body content of the page without <script>...</script> tags.
+        :param input_content: (str) HTML content of the page.
+
+        :return: (str) Body content of the page without <script>...</script> tags.
         """
-        pattern_1 = re.compile(r'<script.*?>.*?</script>', re.DOTALL)
-        pattern_2 = re.compile(r'<path.*?>.*?</path>', re.DOTALL)
-        output = re.sub(pattern_1, '', input_content)
-        output = re.sub(pattern_2, '', output)
+        pattern_1 = re.compile(r"<script.*?>.*?</script>", re.DOTALL)
+        pattern_2 = re.compile(r"<path.*?>.*?</path>", re.DOTALL)
+        output = re.sub(pattern_1, "", input_content)
+        output = re.sub(pattern_2, "", output)
         return output

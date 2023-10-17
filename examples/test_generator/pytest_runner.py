@@ -12,15 +12,12 @@ def run_tests(test_files, add_failed_html=True, add_failure_reasons=True, count_
     """
     Run tests and return results in JSON format.
 
-    Args:
-        test_files: list with test files.
-        add_failed_html: boolean to add html report.
-        add_failure_reasons: boolean to add failure reasons.
-        count_of_htmls: count of htmls to add. Doesn't recommend to use more than 1.
+    :param test_files: (list) list with test files.
+    :param add_failed_html: (bool) boolean to add html report.
+    :param add_failure_reasons: (bool) boolean to add failure reasons.
+    :param count_of_htmls: (int) count of htmls to add. Doesn't recommend to use more than 1.
 
-    Returns:
-        JSON with results.
-
+    :return: JSON with results.
     """
     pytest.main(["-q", "--json-report", "--json-report-file=test_report.json", "-n=4", "-rfEx --tb=none -p no:warnings -p no:logging"] + test_files)
 
@@ -56,11 +53,9 @@ def parse_error_page(node_name):
     """
     Parse error page.
 
-    Args:
-        node_name: name of the node.
+    :param node_name: (str) name of the node.
 
-    Returns:
-        string with parsed page.
+    :return: (str) formatted content of the page.
     """
     parser = PageRetriever()
     try:

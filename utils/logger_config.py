@@ -5,7 +5,7 @@ Author: Iliya Vereshchagin
 Copyright (c) 2023. All rights reserved.
 
 Created: 25.08.2023
-Last Modified: 25.08.2023
+Last Modified: 17.10.2023
 
 Description:
 This file contains configuration for loggers.
@@ -26,7 +26,6 @@ def setup_logger(name: str, log_file: str, level=logging.DEBUG):
     :param level: logging level. Default is logging.DEBUG
 
     :returns: logger object
-
     """
     formatter = logging.Formatter("%(asctime)s [%(levelname)s] %(name)s: %(message)s")
 
