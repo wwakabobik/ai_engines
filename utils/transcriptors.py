@@ -5,7 +5,7 @@ Author: Iliya Vereshchagin
 Copyright (c) 2023. All rights reserved.
 
 Created: 25.08.2023
-Last Modified: 25.08.2023
+Last Modified: 17.10.2023
 
 Description:
 This module contains implementation for Custom Transcriptor
@@ -15,9 +15,7 @@ import speech_recognition as sr
 
 
 class CustomTranscriptor:
-    """
-    This is wrapper class for Google Transcriptor which uses microphone to get audio sample.
-    """
+    """This is wrapper class for Google Transcriptor which uses microphone to get audio sample."""
 
     def __init__(self, language="en-EN"):
         """

@@ -5,29 +5,25 @@ Author: Iliya Vereshchagin
 Copyright (c) 2023. All rights reserved.
 
 Created: 25.08.2023
-Last Modified: 25.08.2023
+Last Modified: 17.10.2023
 
 Description:
-This file contains testing procedures for ChatGPt experiments
+This file contains testing procedures for ChatGPT experiments
 """
 
+import asyncio
 import string
 import sys
-
-import asyncio
 
 from utils.audio_recorder import AudioRecorder
 from utils.transcriptors import CustomTranscriptor
 from utils.tts import CustomTTS
-
-from creds import oai_token, oai_organization
-from openai_api.src.openai_api.chatgpt import ChatGPT
-
+from ..creds import oai_token, oai_organization
+from ...openai_api import ChatGPT
 
 gpt = ChatGPT(auth_token=oai_token, organization=oai_organization, model="gpt-3.5-turbo")
 gpt.max_tokens = 200
 gpt.stream = True
-
 
 tts = CustomTTS(method="google", lang="en")
 
@@ -37,6 +33,13 @@ tts_queue = asyncio.Queue()
 
 
 async def ask_chat(user_input):
+    """
+    Ask chatbot a question
+
+    :param user_input: (str) User input
+
+    :return: (str) Chatbot response
+    """
     full_response = ""
     word = ""
     async for response in gpt.str_chat(user_input):
@@ -54,6 +57,7 @@ async def ask_chat(user_input):
 
 
 async def tts_task():
+    """Task to process words and chars for TTS"""
     limit = 5
     empty_counter = 0
     while True:
@@ -84,6 +88,7 @@ async def tts_task():
 
 
 async def tts_sentence_task():
+    """Task to handle sentences for TTS"""
     punctuation_marks = ".?!,;:"
     sentence = ""
     while True:
@@ -94,34 +99,36 @@ async def tts_sentence_task():
             if sentence[-1] in punctuation_marks:
                 await tts_queue.put(sentence)
                 sentence = ""
-        except Exception as error:
+        except Exception:  # pylint: disable=broad-except
             pass
 
 
 async def tts_worker():
+    """Task to process sentences for TTS"""
     while True:
         try:
             sentence = await tts_queue.get()
             if sentence:
                 await tts.process(sentence)
                 tts_queue.task_done()
-        except Exception as error:
+        except Exception:  # pylint: disable=broad-except
             pass
 
 
 async def get_user_input():
+    """Get user input"""
     while True:
         try:
             user_input = input()
             if user_input.lower() == "[done]":
                 break
-            else:
-                await ask_chat(user_input)
+            await ask_chat(user_input)
         except KeyboardInterrupt:
             break
 
 
 async def main():
+    """Main function"""
     asyncio.create_task(tts_sentence_task())
     asyncio.create_task(tts_worker())
     method = "google"
@@ -134,15 +141,13 @@ async def main():
                     transcript = await gpt.transcript(file=f, language="en")
             else:
                 transcript = CustomTranscriptor(language="en-US").transcript()
-                pass
             if transcript:
                 print(f"User: {transcript}")
-                #translate = CustomTranslator(source='ru', target='en').translate(transcript)
-                #print(translate)
-                response = await ask_chat(transcript)
+                # translate = CustomTranslator(source='ru', target='en').translate(transcript)
+                # print(translate)
+                await ask_chat(transcript)
         except KeyboardInterrupt:
             break
 
 
 asyncio.run(main())
-
