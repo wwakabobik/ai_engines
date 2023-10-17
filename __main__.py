@@ -5,7 +5,7 @@ Author: Iliya Vereshchagin
 Copyright (c) 2023. All rights reserved.
 
 Created: 25.08.2023
-Last Modified: 16.09.2023
+Last Modified: 17.10.2023
 
 Description:
 This file is entry point for project-wide structure.
@@ -14,7 +14,8 @@ This file is entry point for project-wide structure.
 # Engines
 from .openai_api.src.openai_api.chatgpt import ChatGPT  # pylint: disable=unused-import
 from .openai_api.src.openai_api.dalle import DALLE  # pylint: disable=unused-import
-from .leonardo_api import Leonardo, LeonardoAsync  # pylint: disable=unused-import
+from .leonardo_api.src.leonardo_api.leonardo_sync import Leonardo  # pylint: disable=unused-import
+from .leonardo_api.src.leonardo_api.leonardo_async import Leonardo as LeonardoAsync  # pylint: disable=unused-import
 
 # Utils
 from .utils.tts import CustomTTS  # pylint: disable=unused-import

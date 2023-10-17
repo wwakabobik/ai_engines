@@ -32,7 +32,7 @@ def get_weather(city, units):
     """
     base_url = "http://api.openweathermap.org/data/2.5/weather"
     params = {"q": city, "appid": "93171b03384f92ee3c55873452a49c7c", "units": units}
-    response = requests.get(base_url, params=params)
+    response = requests.get(base_url, params=params, timeout=30)
     data = response.json()
     return data
 
