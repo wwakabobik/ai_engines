@@ -1,5 +1,6 @@
 """This module runs pytest and returns the results in JSON format."""
 import io
+from os import remove
 
 import json
 import pytest
@@ -63,7 +64,11 @@ def parse_error_page(node_name):
     """
     parser = PageRetriever()
     try:
-        with open(f"{node_name}.html", "r", encoding="utf-8") as file:
-            return parser.remove_script_tags(parser.extract_body_content(file))
+        formatted_content = ''
+        file_name = f"{node_name}.html"
+        with open(file_name, "r", encoding="utf-8") as file:
+            formatted_content = parser.remove_script_tags(parser.extract_body_content(file))
+        remove(file_name)
+        return formatted_content
     except io.UnsupportedOperation:
         return "No page available."

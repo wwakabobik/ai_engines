@@ -22,8 +22,7 @@ webdriver_manager==4.0.1
 selenium==4.14.0
 pytest==7.4.2
 pytest-json-report==1.5.0
-pytest-xdist=3.3.1
+pytest-xdist==3.3.1
 # Third-party-test
 cohere==4.27
 llamaapi==0.1.36
-
