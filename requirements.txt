@@ -24,5 +24,5 @@ pytest==7.4.3
 pytest-json-report==1.5.0
 pytest-xdist==3.3.1
 # Third-party-test
-cohere==4.31
+cohere==4.32
 llamaapi==0.1.36
