@@ -74,7 +74,6 @@ class PageRetriever:
         Get the body content of the page without <script>...</script> tags.
 
         :param url: (str) URL of the page.
-
         :return: (str) Body content of the page without <script>...</script> tags.
         """
         if url:
@@ -86,7 +85,6 @@ class PageRetriever:
         Get the page content from the url.
 
         :param url: (str) URL of the page.
-
         :return: (str) HTML content of the page.
         """
         self.driver.get(url)
@@ -114,7 +112,6 @@ class PageRetriever:
         Extract the body content from the html_content.
 
         :param html_content: (str) HTML content of the page.
-
         :return: (str) Body content of the page.
         """
         soup = BeautifulSoup(html_content, "html.parser")
@@ -128,7 +125,6 @@ class PageRetriever:
         Remove all <script>...</script> tags from the input_content.
 
         :param input_content: (str) HTML content of the page.
-
         :return: (str) Body content of the page without <script>...</script> tags.
         """
         pattern_1 = re.compile(r"<script.*?>.*?</script>", re.DOTALL)

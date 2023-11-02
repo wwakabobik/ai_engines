@@ -11,15 +11,16 @@ Description:
 This file contains testing procedures for ChatGPT experiments
 """
 
-import asyncio
 import string
 import sys
 
+import asyncio
+from openai_python_api import ChatGPT
+
+from examples.creds import oai_token, oai_organization
 from utils.audio_recorder import AudioRecorder
 from utils.transcriptors import CustomTranscriptor
 from utils.tts import CustomTTS
-from ..creds import oai_token, oai_organization
-from ...openai_api import ChatGPT
 
 gpt = ChatGPT(auth_token=oai_token, organization=oai_organization, model="gpt-3.5-turbo")
 gpt.max_tokens = 200

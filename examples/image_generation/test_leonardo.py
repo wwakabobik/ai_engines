@@ -10,10 +10,10 @@ Last Modified: 17.10.2023
 Description:
 This file contains testing procedures for Leonardo experiments
 """
-import asyncio
 import json
 
-from leonardo_api.src.leonardo_api.leonardo_async import Leonardo
+import asyncio
+from leonardo_api.leonardo_async import Leonardo
 
 
 async def main():

@@ -15,10 +15,10 @@ from io import BytesIO
 
 import requests
 from PIL import Image
+from leonardo_api import Leonardo
+from openai_python_api import DALLE
 
 from examples.creds import oai_token, oai_organization
-from leonardo_api.src.leonardo_api.leonardo_sync import Leonardo
-from openai_api.src.openai_api.dalle import DALLE
 
 
 def get_weather(city, units):
@@ -65,7 +65,7 @@ def draw_image_using_dalle(prompt):
     dalle = DALLE(auth_token=oai_token, organization=oai_organization)
     image = dalle.create_image_url(prompt)
     url_dict = {"image_url": image[0]}
-    response = requests.get(image[0])
+    response = requests.get(image[0], timeout=30)
     img = Image.open(BytesIO(response.content))
     img.show()
     return json.dumps(url_dict)
@@ -90,7 +90,7 @@ def draw_image(prompt):
     )
     response = leonardo.wait_for_image_generation(generation_id=response["sdGenerationJob"]["generationId"])
     url_dict = {"image_url": response[0]["url"]}
-    response = requests.get(url_dict["image_url"])
+    response = requests.get(url_dict["image_url"], timeout=30)
     img = Image.open(BytesIO(response.content))
     img.show()
     return json.dumps(url_dict)
