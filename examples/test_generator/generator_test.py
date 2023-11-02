@@ -26,7 +26,7 @@ generator = PomTestCaseGenerator(url="https://www.saucedemo.com/")
 # generator = PomTestCaseGenerator(url='https://automationintesting.com/selenium/testpage/')
 
 
-system_instructions = """
+SYSTEM_INSTRUCTIONS = """
 You're bot responsible for QA automation testing. You tech stack is selenium + pytest. I will provide you url for testing.
 
 1) You may obtain page code by calling "get_page_code" function. It will return you:
@@ -68,7 +68,7 @@ def setup_gpt():
     gpt.function_dict = gpt_functions_dict
     gpt.function_call = "auto"
     gpt.functions = gpt_functions
-    gpt.system_settings = system_instructions
+    gpt.system_settings = SYSTEM_INSTRUCTIONS
     return gpt
 
 
