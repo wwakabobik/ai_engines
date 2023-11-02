@@ -18,7 +18,7 @@ from PIL import Image
 from leonardo_api import Leonardo
 from openai_python_api import DALLE
 
-from examples.creds import oai_token, oai_organization
+from examples.creds import oai_token, oai_organization, openweathermap_appid
 
 
 def get_weather(city, units):
@@ -31,7 +31,7 @@ def get_weather(city, units):
     :return: The weather for the given city.
     """
     base_url = "http://api.openweathermap.org/data/2.5/weather"
-    params = {"q": city, "appid": "93171b03384f92ee3c55873452a49c7c", "units": units}
+    params = {"q": city, "appid": openweathermap_appid, "units": units}
     response = requests.get(base_url, params=params, timeout=30)
     data = response.json()
     return data
