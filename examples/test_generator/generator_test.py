@@ -11,15 +11,16 @@ Description:
 This file contains testing procedures for ChatGPT experiments
 """
 
-import asyncio
 import json
 import logging
+
+import asyncio
+from openai_python_api import ChatGPT
 
 from examples.creds import oai_token, oai_organization
 from examples.test_generator.gpt_functions import gpt_functions, gpt_functions_dict
 from examples.test_generator.pom_case_generator import PomTestCaseGenerator
-from openai_api.src.openai_api import ChatGPT
-from openai_api.src.openai_api.logger_config import setup_logger
+from utils.logger_config import setup_logger
 
 generator = PomTestCaseGenerator(url="https://www.saucedemo.com/")
 # generator = PomTestCaseGenerator(url='https://automationintesting.com/selenium/testpage/')
@@ -62,7 +63,7 @@ Answer only with JSON in format I mentioned in 1. Never add anything more than t
 def setup_gpt():
     """Setup GPT bot with appropriate functions and settings"""
     gpt = ChatGPT(auth_token=oai_token, organization=oai_organization, model="gpt-4-0613")
-    gpt.logger = setup_logger("gpt", "gpt.log", logging.INFO)
+    gpt.logger = setup_logger("gpt", "gpt.log", logging.INFO)  # supress DEBUG output of the ChatGPT
     gpt.system_settings = ""
     gpt.function_dict = gpt_functions_dict
     gpt.function_call = "auto"
