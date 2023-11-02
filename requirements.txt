@@ -28,4 +28,4 @@ cohere==4.32
 llamaapi==0.1.36
 # My AI APIs
 leonardo-api==0.0.7
-openai-python-api==0.0.1
+openai-python-api==0.0.5
