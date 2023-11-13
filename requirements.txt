@@ -9,7 +9,7 @@ SpeechRecognition==3.10.0
 # Translator
 deep_translator==1.11.4
 # Recorder
-pyaudio==0.2.13
+pyaudio==0.2.14
 sounddevice==0.4.6
 soundfile==0.12.1
 numpy==1.26.1
