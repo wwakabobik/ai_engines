@@ -5,7 +5,7 @@ Author: Iliya Vereshchagin
 Copyright (c) 2023. All rights reserved.
 
 Created: 15.10.2023
-Last Modified: 17.10.2023
+Last Modified: 20.11.2023
 
 Description:
 This file contains testing functions for ChatGPT function calling using DALLE and Leonardo experiments
@@ -18,7 +18,7 @@ from PIL import Image
 from leonardo_api import Leonardo
 from openai_python_api import DALLE
 
-from examples.creds import oai_token, oai_organization, openweathermap_appid
+from examples.creds import oai_token, oai_organization, openweathermap_appid, leonardo_token
 
 
 def get_weather(city, units):
@@ -78,7 +78,7 @@ def draw_image(prompt):
     :param prompt: (str) Prompt, the description, what should be drawn and how
     :return: (dict) dict with url of image
     """
-    leonardo = Leonardo(auth_token="a0178171-c67f-4922-afb3-458f24ecef1a")
+    leonardo = Leonardo(auth_token=leonardo_token)
     leonardo.get_user_info()
     response = leonardo.post_generations(
         prompt=prompt,

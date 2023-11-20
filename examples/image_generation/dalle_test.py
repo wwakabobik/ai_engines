@@ -15,6 +15,7 @@ from openai_python_api import DALLE
 
 from examples.creds import oai_token, oai_organization
 
+
 dalle = DALLE(auth_token=oai_token, organization=oai_organization)
 
 

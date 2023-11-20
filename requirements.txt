@@ -30,3 +30,5 @@ llamaapi==0.1.36
 leonardo-api==0.0.7
 openai-python-api==0.0.5
 ablt-python-api==0.0.2
+# Discord
+py-cord==2.4.1
