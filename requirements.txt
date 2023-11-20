@@ -9,23 +9,24 @@ SpeechRecognition==3.10.0
 # Translator
 deep_translator==1.11.4
 # Recorder
-pyaudio==0.2.13
+pyaudio==0.2.14
 sounddevice==0.4.6
 soundfile==0.12.1
-numpy==1.26.1
+numpy==1.26.2
 # Image
 pillow==10.1.0
 # Articles
 readability==0.3.1
 # Testing
 webdriver_manager==4.0.1
-selenium==4.15.1
+selenium==4.15.2
 pytest==7.4.3
 pytest-json-report==1.5.0
-pytest-xdist==3.3.1
+pytest-xdist==3.4.0
 # Third-party-test
-cohere==4.32
+cohere==4.35
 llamaapi==0.1.36
 # My AI APIs
 leonardo-api==0.0.7
 openai-python-api==0.0.5
+ablt-python-api==0.0.1
