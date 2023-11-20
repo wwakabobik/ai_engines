@@ -20,7 +20,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [0.2] - 2023-10-15
 
+### Added
+- Test generator
+- page_retriever
+
 ### Changed
 - Bumped submodules to latest versions
 - Added test project
 - Structure refactoring
+
+
+## [0.3] - 2023-11_20
+
+### Added
+- Added README.md
+- Bumped requirements
+- Removed submodules (moved to requirements - OpenAI API, Leonardo API)
+- Added python 3.12 for linting
