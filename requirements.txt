@@ -29,4 +29,4 @@ llamaapi==0.1.36
 # My AI APIs
 leonardo-api==0.0.7
 openai-python-api==0.0.5
-ablt-python-api==0.0.1
+ablt-python-api==0.0.2
