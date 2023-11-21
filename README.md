@@ -7,13 +7,16 @@ It is not a framework, but a collection of useful tools and examples. It's not a
 ## What you can find here
 
 - [x] [**examples**](/examples) - a collection of examples of AI projects, including:
-  - [x] [image_generation](/examples/image_generation) - a simple example of image generation using DALLE and Leonardo
+  - [x] [image_generation](/examples/image_generation) - TBD
   - [x] [speak_and_hear](/examples/speak_and_hear) - see [article](https://wwakabobik.github.io/2023/09/ai_learning_to_hear_and_speak/) first, this is LLM speech recognition and TTS example
   - [x] [test_generator](/examples/test_generator) - see [article](https://wwakabobik.github.io/2023/10/qa_ai_practices_used_for_qa/) first, this is QA automatic tests generator
   - [x] [llm_api_comparison](/examples/llm_api_comparison) - TBD
 - [x] [**utils**](/utils) - a collection of useful tools for AI development, in general them all of them used in example projects:
   - [x] [article_extractor](/utils/article_extractor.py) - limbo for article extraction from web pages
   - [x] [audio_recorder](/utils/audio_recorder.py) - a simple audio recorder, used in speech recognition / TTS examples
+  - [x] [discord_interations](/utils/discord_interactions.py) - a simple discord interactions wrapper, used to fire self-bot commands
+  - [x] [discord_watcher](/utils/discord_watcher.py) - a simple discord watcher bot, used to watch for messages in discord channels and get content (urls)
+  - [x] [llm_timer_wrapper](/utils/llm_timer_wrapper.py) - a simple timer wrapper for LLM APIs, used for benchmarking of models
   - [x] [logger_config](/utils/logger_config.py) - general logger
   - [x] [other](/utils/other.py) - all that doesn't fit in other files, i.e. env checkers
   - [x] [page_retriever](/utils/page_retriever.py) - web page retriever and parser
