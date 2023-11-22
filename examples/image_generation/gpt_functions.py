@@ -10,6 +10,7 @@ Last Modified: 20.11.2023
 Description:
 This file contains testing functions for ChatGPT function calling using DALLE and Leonardo experiments
 """
+
 import json
 from io import BytesIO
 

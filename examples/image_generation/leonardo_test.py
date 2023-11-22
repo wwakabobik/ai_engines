@@ -27,7 +27,7 @@ async def main():
     prompt = "a beautiful necromancer witch resurrects skeletons against the backdrop of a burning ruined castle"
     response = await leonardo.post_generations(
         prompt=prompt,
-        num_images=1,
+        num_images=2,
         negative_prompt="bright colors, good characters, positive",
         model_id="e316348f-7773-490e-adcd-46757c738eb7",
         width=1024,

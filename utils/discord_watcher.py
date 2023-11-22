@@ -59,3 +59,4 @@ class DiscordWatcher(commands.Bot, ABC):
                         return embed.to_dict()
             else:
                 self.___logger.debug('Found a message from the target user, but content is not ready yet...')
+

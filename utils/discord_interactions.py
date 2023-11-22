@@ -36,7 +36,6 @@ class DiscordInteractions:
         :type my_text_prompt: str
         :param kwargs: The parameters for the interaction.
         :return: The response from the interaction.
-        :rtype: dict
         """
         params = {**self.default_params, **kwargs}
 
@@ -63,6 +62,5 @@ class DiscordInteractions:
 
         async with aiohttp.ClientSession() as session:
             async with session.post(self.url, json=payload_data, headers=self.headers) as resp:
-                if resp.status != 200:
+                if resp.status != 200 and resp.status != 204:
                     raise ValueError(f"Request failed with status code {resp.status}")
-                return await resp.json()
