@@ -18,7 +18,8 @@ from cohere import Client as CohereClient
 from llamaapi import LlamaAPI
 from openai_python_api import ChatGPT
 
-from examples.creds import oai_token, oai_organization, cohere_token, llama_token
+# pylint: disable=import-error
+from examples.creds import oai_token, oai_organization, cohere_token, llama_token  # type: ignore
 from examples.llm_api_comparison.csv_saver import save_to_csv
 from examples.llm_api_comparison.llm_questions import llm_questions
 from utils.llm_timer_wrapper import TimeMetricsWrapperAsync, TimeMetricsWrapperSync

@@ -17,7 +17,8 @@ import sys
 import asyncio
 from openai_python_api import ChatGPT
 
-from examples.creds import oai_token, oai_organization
+# pylint: disable=import-error
+from examples.creds import oai_token, oai_organization  # type: ignore
 from utils.audio_recorder import AudioRecorder
 from utils.transcriptors import CustomTranscriptor
 from utils.tts import CustomTTS

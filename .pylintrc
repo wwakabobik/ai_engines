@@ -3,3 +3,9 @@ max-line-length=120
 
 [MESSAGES CONTROL]
 disable=E1101,R0913
+
+[MASTER]
+ignore=creds,ablt_models
+
+[IMPORTS]
+ignored-modules=examples.creds,examples.llm_api_comparison.ablt_models

@@ -14,8 +14,9 @@ This file contains discord interactions to python API.
 import aiohttp
 
 
-class DiscordInteractions:
-    """"""
+class DiscordInteractions:  # pylint: disable=too-few-public-methods
+    """Discord interactions to python API."""
+
     def __init__(self, token, **kwargs):
         """
         Initialize DiscordInteractions class.
@@ -36,33 +37,25 @@ class DiscordInteractions:
         :type my_text_prompt: str
         :param kwargs: The parameters for the interaction.
         :return: The response from the interaction.
-        :rtype: dict
         """
         params = {**self.default_params, **kwargs}
 
         payload_data = {
             "type": 2,
-            "application_id": params.get('application_id'),
-            "guild_id": params.get('guild_id'),
-            "channel_id": params.get('channel_id'),
-            "session_id": params.get('session_id'),
+            "application_id": params.get("application_id"),
+            "guild_id": params.get("guild_id"),
+            "channel_id": params.get("channel_id"),
+            "session_id": params.get("session_id"),
             "data": {
-                "version": params.get('version'),
-                "id": params.get('interaction_id'),
+                "version": params.get("version"),
+                "id": params.get("interaction_id"),
                 "name": "imagine",
                 "type": 1,
-                "options": [
-                    {
-                        "type": 3,
-                        "name": "prompt",
-                        "value": my_text_prompt
-                    }
-                ]
-            }
+                "options": [{"type": 3, "name": "prompt", "value": my_text_prompt}],
+            },
         }
 
         async with aiohttp.ClientSession() as session:
             async with session.post(self.url, json=payload_data, headers=self.headers) as resp:
-                if resp.status != 200:
+                if resp.status not in (200, 204):
                     raise ValueError(f"Request failed with status code {resp.status}")
-                return await resp.json()

@@ -16,7 +16,8 @@ import json
 import asyncio
 from leonardo_api.leonardo_async import Leonardo
 
-from examples.creds import leonardo_token
+# pylint: disable=import-error
+from examples.creds import leonardo_token  # type: ignore
 
 
 async def main():
@@ -27,7 +28,7 @@ async def main():
     prompt = "a beautiful necromancer witch resurrects skeletons against the backdrop of a burning ruined castle"
     response = await leonardo.post_generations(
         prompt=prompt,
-        num_images=1,
+        num_images=2,
         negative_prompt="bright colors, good characters, positive",
         model_id="e316348f-7773-490e-adcd-46757c738eb7",
         width=1024,
@@ -37,5 +38,6 @@ async def main():
     print(response)
     response = await leonardo.wait_for_image_generation(generation_id=response["sdGenerationJob"]["generationId"])
     print(json.dumps(response[0]["url"]))
+
 
 asyncio.run(main())

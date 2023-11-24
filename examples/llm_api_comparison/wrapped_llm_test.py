@@ -13,12 +13,12 @@ This file contains benchmarks for wrapped LLMs models.
 
 from ablt_python_api import ABLTApi
 
-from examples.creds import ablt_token
-from utils.llm_timer_wrapper import TimeMetricsWrapperSync
+# pylint: disable=import-error
+from examples.creds import ablt_token  # type: ignore
+from examples.llm_api_comparison.ablt_models import unique_models  # type: ignore
 from examples.llm_api_comparison.csv_saver import save_to_csv
 from examples.llm_api_comparison.llm_questions import llm_questions
-from examples.llm_api_comparison.ablt_models import unique_models
-
+from utils.llm_timer_wrapper import TimeMetricsWrapperSync
 
 # Initialize LLM with tokens
 ablt = ABLTApi(ablt_token, ssl_verify=False)
@@ -47,14 +47,10 @@ def main():
             while True:
                 try:
                     response = check_chat_ablt_response(prompt, model)
-                    save_to_csv(
-                        file_name="llm_wrapped.csv",
-                        model_name=model,
-                        question=prompt,
-                        metrics=response)
+                    save_to_csv(file_name="llm_wrapped.csv", model_name=model, question=prompt, metrics=response)
                     error_counter = 5
                     break
-                except Exception as error:
+                except Exception as error:  # pylint: disable=broad-except
                     if error_counter == 0:
                         print("Broken API? Skipping...")
                         break
