@@ -39,4 +39,5 @@ async def main():
     response = await leonardo.wait_for_image_generation(generation_id=response["sdGenerationJob"]["generationId"])
     print(json.dumps(response[0]["url"]))
 
+
 asyncio.run(main())

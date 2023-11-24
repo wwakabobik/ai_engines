@@ -26,9 +26,14 @@ from leonardo_api import LeonardoAsync as Leonardo
 from openai_python_api.dalle import DALLE
 
 # pylint: disable=import-error
-from examples.creds import oai_token, oai_organization, leonardo_token, ablt_token, discord_midjourney_payload  # type: ignore
+from examples.creds import (
+    oai_token,
+    oai_organization,
+    leonardo_token,
+    ablt_token,
+    discord_midjourney_payload,
+)  # type: ignore
 from utils.discord_interactions import DiscordInteractions
-
 
 # Initialize the APIs
 ssl_context = ssl.create_default_context()
@@ -143,14 +148,14 @@ async def generate_image():
         midjourney_prompt = await ablt.chat(
             bot_slug="maina",
             prompt=f"Please write a midjourney prompt with aspect ratio 1:1, realistic style: '{prompt}'. "
-                   f"Give me the prompt only, without any comments and descriptions. "
-                   f"Just prompt output for midjourney.",
+            f"Give me the prompt only, without any comments and descriptions. "
+            f"Just prompt output for midjourney.",
             stream=False,
         ).__anext__()
         dalle_prompt = await ablt.chat(
             bot_slug="maina",
             prompt=f"Please write a dalle3 prompt: '{prompt}'. "
-                   f"Give me the prompt only, without any comments and descriptions. Just prompt output.",
+            f"Give me the prompt only, without any comments and descriptions. Just prompt output.",
             stream=False,
         ).__anext__()
         midjourney_prompt = midjourney_prompt.replace("`", "").replace("n", "")
@@ -169,9 +174,11 @@ async def generate_image():
         image_list.append(
             {
                 "images": {"leonardo": leonardo_image, "dalle3": dalle3_image, "midjourney": midjourney_image},
-                "url": {"leonardo": leonardo_image_url.strip("'").strip('"'),
-                        "dalle3": dalle3_image_url.strip("'").strip('"'),
-                        "midjourney": midjourney_image_url.strip("'").strip('"')},
+                "url": {
+                    "leonardo": leonardo_image_url.strip("'").strip('"'),
+                    "dalle3": dalle3_image_url.strip("'").strip('"'),
+                    "midjourney": midjourney_image_url.strip("'").strip('"'),
+                },
                 "prompts": {"leonardo": dalle_prompt, "dalle3": dalle_prompt, "midjourney": midjourney_prompt},
             }
         )
@@ -210,7 +217,7 @@ async def get_midjourney_variations(image_list):
     """
     variations = []
     for index, images in enumerate(image_list):
-        midjourney_url = await midjourney_wrapper(f"{images["url"]["midjourney"]} {images["prompts"]["midjourney"]}")
+        midjourney_url = await midjourney_wrapper(f'{images["url"]["midjourney"]} {images["prompts"]["midjourney"]}')
         midjourney_file = await save_image_from_url(midjourney_url, f"midjourney_variation_{index}.png")
         variations.append({"url": midjourney_url.strip("'").strip('"'), "image": midjourney_file})
     return variations
@@ -237,7 +244,6 @@ async def get_leonardo_variations(image_list):
             height=1024,
             prompt_magic=True,
             init_image_id=leonardo_generation,
-
         )
         response = await leonardo.wait_for_image_generation(generation_id=response["sdGenerationJob"]["generationId"])
         leonardo_url = json.dumps(response["url"])
@@ -257,25 +263,28 @@ async def generate_variations(image_list):
     dalle_variations_coro = get_dalle_variations(image_list)
     midjourney_variations_coro = get_midjourney_variations(image_list)
     leonardo_variations_coro = get_leonardo_variations(image_list)
-    dalle_variations, midjourney_variations, leonardo_variations = await asyncio.gather(dalle_variations_coro,
-                                                                                        midjourney_variations_coro,
-                                                                                        leonardo_variations_coro)
+    dalle_variations, midjourney_variations, leonardo_variations = await asyncio.gather(
+        dalle_variations_coro, midjourney_variations_coro, leonardo_variations_coro
+    )
     variations = []
-    for leonardo_item, dalle_item, midjourney_item, image_item in zip(leonardo_variations, dalle_variations,
-                                                                      midjourney_variations, image_list):
-        variations.append({
-            "images": {
-                "leonardo": leonardo_item['image'],
-                "dalle3": dalle_item['image'],
-                "midjourney": midjourney_item['image']
-            },
-            "url": {
-                "leonardo": leonardo_item['url'],
-                "dalle3": dalle_item['url'],
-                "midjourney": midjourney_item['url']
-            },
-            "prompts": image_item['prompts']
-        })
+    for leonardo_item, dalle_item, midjourney_item, image_item in zip(
+        leonardo_variations, dalle_variations, midjourney_variations, image_list
+    ):
+        variations.append(
+            {
+                "images": {
+                    "leonardo": leonardo_item["image"],
+                    "dalle3": dalle_item["image"],
+                    "midjourney": midjourney_item["image"],
+                },
+                "url": {
+                    "leonardo": leonardo_item["url"],
+                    "dalle3": dalle_item["url"],
+                    "midjourney": midjourney_item["url"],
+                },
+                "prompts": image_item["prompts"],
+            }
+        )
     return variations
 
 
