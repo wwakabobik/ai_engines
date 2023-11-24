@@ -18,7 +18,7 @@ from discord.ext import commands
 from utils.logger_config import setup_logger
 
 
-class DiscordWatcher(commands.Bot, ABC):
+class DiscordWatcher(commands.Bot, ABC):  # pylint: disable=too-many-ancestors
     """Discord bot watcher for getting messages (images, urls, embeds) from a specific user."""
 
     def __init__(self, watch_user_id=None, **options):

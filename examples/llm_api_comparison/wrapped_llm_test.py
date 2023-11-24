@@ -50,7 +50,7 @@ def main():
                     save_to_csv(file_name="llm_wrapped.csv", model_name=model, question=prompt, metrics=response)
                     error_counter = 5
                     break
-                except Exception as error:
+                except Exception as error:  # pylint: disable=broad-except
                     if error_counter == 0:
                         print("Broken API? Skipping...")
                         break

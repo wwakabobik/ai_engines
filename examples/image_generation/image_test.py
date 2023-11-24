@@ -18,9 +18,9 @@ import time
 from pprint import pprint
 from urllib.parse import unquote
 
+import asyncio
 import aiofiles
 import aiohttp
-import asyncio
 from ablt_python_api import ABLTApi_async as ABLTApi
 from leonardo_api import LeonardoAsync as Leonardo
 from openai_python_api.dalle import DALLE
@@ -98,7 +98,7 @@ def find_and_clear(log_file):
     :rtype: str
     """
     for _ in range(12):
-        with open(log_file, "r+") as file:
+        with open(log_file, "r+", encoding="utf-8") as file:
             lines = file.readlines()
             for line in reversed(lines):
                 match = re.search(r"Found an attachment: (.*)", line)
@@ -131,7 +131,7 @@ async def save_image_from_url(url, file_path):
             return None
 
 
-async def generate_image():
+async def generate_image():  # pylint: disable=too-many-locals
     """
     Generate image.
 

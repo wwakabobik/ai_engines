@@ -14,7 +14,7 @@ This file contains discord interactions to python API.
 import aiohttp
 
 
-class DiscordInteractions:
+class DiscordInteractions:  # pylint: disable=too-few-public-methods
     """Discord interactions to python API."""
 
     def __init__(self, token, **kwargs):
