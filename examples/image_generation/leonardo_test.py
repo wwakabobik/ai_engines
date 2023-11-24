@@ -16,7 +16,8 @@ import json
 import asyncio
 from leonardo_api.leonardo_async import Leonardo
 
-from examples.creds import leonardo_token
+# pylint: disable=import-error
+from examples.creds import leonardo_token  # type: ignore
 
 
 async def main():

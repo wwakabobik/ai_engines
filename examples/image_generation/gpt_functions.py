@@ -19,7 +19,8 @@ from PIL import Image
 from leonardo_api import Leonardo
 from openai_python_api import DALLE
 
-from examples.creds import oai_token, oai_organization, openweathermap_appid, leonardo_token
+# pylint: disable=import-error
+from examples.creds import oai_token, oai_organization, openweathermap_appid, leonardo_token  # type: ignore
 
 
 def get_weather(city, units):

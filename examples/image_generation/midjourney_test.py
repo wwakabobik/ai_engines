@@ -16,7 +16,8 @@ import asyncio
 from utils.discord_watcher import DiscordWatcher
 from utils.discord_interactions import DiscordInteractions
 
-from examples.creds import discord_watcher_token, discord_midjourney_payload
+# pylint: disable=import-error
+from examples.creds import discord_watcher_token, discord_midjourney_payload  # type: ignore
 
 
 # Usage

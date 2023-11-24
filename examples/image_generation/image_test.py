@@ -16,6 +16,7 @@ import re
 import ssl
 import time
 from pprint import pprint
+from urllib.parse import unquote
 
 import aiofiles
 import aiohttp
@@ -24,8 +25,10 @@ from ablt_python_api import ABLTApi_async as ABLTApi
 from leonardo_api import LeonardoAsync as Leonardo
 from openai_python_api.dalle import DALLE
 
-from examples.creds import oai_token, oai_organization, leonardo_token, ablt_token, discord_midjourney_payload
+# pylint: disable=import-error
+from examples.creds import oai_token, oai_organization, leonardo_token, ablt_token, discord_midjourney_payload  # type: ignore
 from utils.discord_interactions import DiscordInteractions
+
 
 # Initialize the APIs
 ssl_context = ssl.create_default_context()
@@ -41,6 +44,9 @@ async def midjourney_wrapper(prompt):
     Wrapper for midjourney testing.
 
     :param prompt: The prompt to use for the function.
+    :type prompt: str
+    :return: The attachment found in the log file.
+    :rtype: str
     """
     discord = DiscordInteractions(
         token=discord_midjourney_payload["auth_token"],
@@ -56,6 +62,15 @@ async def midjourney_wrapper(prompt):
 
 
 async def leonardo_wrapper(prompt):
+    """
+    Wrapper for leonardo testing.
+
+    :param prompt: The prompt to use for the function.
+    :type prompt: str
+
+    :return: The image url.
+    :rtype: str
+    """
     response = await leonardo.post_generations(
         prompt=prompt,
         num_images=1,
@@ -98,8 +113,9 @@ async def save_image_from_url(url, file_path):
     :param file_path: The file path to use for the function.
     :type file_path: str
     """
+    print(url)
     async with aiohttp.ClientSession() as session:
-        async with session.get(url) as response:
+        async with session.get(unquote(url).strip('"').strip("'")) as response:
             if response.status == 200:
                 f = await aiofiles.open(file_path, mode="wb")
                 await f.write(await response.read())
@@ -111,6 +127,12 @@ async def save_image_from_url(url, file_path):
 
 
 async def generate_image():
+    """
+    Generate image.
+
+    :return: The image list with dict (contains url and filepathes).
+    :rtype: list
+    """
     prompts = (
         "beautiful and scary necromancer girl riding white unicorn",
         "draw a character that is a toast-mascot in cartoon style",
@@ -121,14 +143,14 @@ async def generate_image():
         midjourney_prompt = await ablt.chat(
             bot_slug="maina",
             prompt=f"Please write a midjourney prompt with aspect ratio 1:1, realistic style: '{prompt}'. "
-            f"Give me the prompt only, without any comments and descriptions. "
-            f"Just prompt output for midjourney.",
+                   f"Give me the prompt only, without any comments and descriptions. "
+                   f"Just prompt output for midjourney.",
             stream=False,
         ).__anext__()
         dalle_prompt = await ablt.chat(
             bot_slug="maina",
             prompt=f"Please write a dalle3 prompt: '{prompt}'. "
-            f"Give me the prompt only, without any comments and descriptions. Just prompt output.",
+                   f"Give me the prompt only, without any comments and descriptions. Just prompt output.",
             stream=False,
         ).__anext__()
         midjourney_prompt = midjourney_prompt.replace("`", "").replace("n", "")
@@ -147,7 +169,10 @@ async def generate_image():
         image_list.append(
             {
                 "images": {"leonardo": leonardo_image, "dalle3": dalle3_image, "midjourney": midjourney_image},
-                "url": {"leonardo": leonardo_image_url, "dalle3": dalle3_image_url, "midjourney": midjourney_image_url},
+                "url": {"leonardo": leonardo_image_url.strip("'").strip('"'),
+                        "dalle3": dalle3_image_url.strip("'").strip('"'),
+                        "midjourney": midjourney_image_url.strip("'").strip('"')},
+                "prompts": {"leonardo": dalle_prompt, "dalle3": dalle_prompt, "midjourney": midjourney_prompt},
             }
         )
     return image_list
@@ -170,7 +195,87 @@ async def get_dalle_variations(image_list):
         with open(file_path, "rb") as file:
             url = await dalle.create_variation_from_file_and_get_url(file)
             image = await save_image_from_url(url, f"dalle3_variation_{index}.png")
-            variations.append({"url": url, "image": image})
+            variations.append({"url": url.strip("'").strip('"'), "image": image})
+    return variations
+
+
+async def get_midjourney_variations(image_list):
+    """
+    Get variations from midjourney images.
+
+    :param image_list: The image list to use for the function.
+    :type image_list: list
+    :return: The variations from midjourney images.
+    :rtype: list
+    """
+    variations = []
+    for index, images in enumerate(image_list):
+        midjourney_url = await midjourney_wrapper(f"{images["url"]["midjourney"]} {images["prompts"]["midjourney"]}")
+        midjourney_file = await save_image_from_url(midjourney_url, f"midjourney_variation_{index}.png")
+        variations.append({"url": midjourney_url.strip("'").strip('"'), "image": midjourney_file})
+    return variations
+
+
+async def get_leonardo_variations(image_list):
+    """
+    Get variations from leonardo images.
+
+    :param image_list: The image list to use for the function.
+    :type image_list: list
+    :return: The variations from leonardo images.
+    :rtype: list
+    """
+    variations = []
+    for index, images in enumerate(image_list):
+        image_file = images["images"]["leonardo"]
+        leonardo_generation = await leonardo.upload_init_image(image_file)
+        response = await leonardo.post_generations(
+            prompt=images["prompts"]["leonardo"],
+            num_images=1,
+            model_id="1e60896f-3c26-4296-8ecc-53e2afecc132",
+            width=1024,
+            height=1024,
+            prompt_magic=True,
+            init_image_id=leonardo_generation,
+
+        )
+        response = await leonardo.wait_for_image_generation(generation_id=response["sdGenerationJob"]["generationId"])
+        leonardo_url = json.dumps(response["url"])
+        leonardo_file = await save_image_from_url(leonardo_url, f"leonardo_variation_{index}.png")
+        variations.append({"url": leonardo_url, "image": leonardo_file})
+    return variations
+
+
+async def generate_variations(image_list):
+    """
+    Generate variations.
+
+    :return: The variations list.
+    :rtype: list
+    """
+
+    dalle_variations_coro = get_dalle_variations(image_list)
+    midjourney_variations_coro = get_midjourney_variations(image_list)
+    leonardo_variations_coro = get_leonardo_variations(image_list)
+    dalle_variations, midjourney_variations, leonardo_variations = await asyncio.gather(dalle_variations_coro,
+                                                                                        midjourney_variations_coro,
+                                                                                        leonardo_variations_coro)
+    variations = []
+    for leonardo_item, dalle_item, midjourney_item, image_item in zip(leonardo_variations, dalle_variations,
+                                                                      midjourney_variations, image_list):
+        variations.append({
+            "images": {
+                "leonardo": leonardo_item['image'],
+                "dalle3": dalle_item['image'],
+                "midjourney": midjourney_item['image']
+            },
+            "url": {
+                "leonardo": leonardo_item['url'],
+                "dalle3": dalle_item['url'],
+                "midjourney": midjourney_item['url']
+            },
+            "prompts": image_item['prompts']
+        })
     return variations
 
 
@@ -178,8 +283,8 @@ async def main():
     """Main function."""
     image_list = await generate_image()
     pprint(image_list)
-    dalle_variations = await get_dalle_variations(image_list)
-    pprint(dalle_variations)
+    variation_list = await generate_variations(image_list)
+    pprint(variation_list)
 
 
 asyncio.run(main())

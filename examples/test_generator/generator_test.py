@@ -17,7 +17,8 @@ import logging
 import asyncio
 from openai_python_api import ChatGPT
 
-from examples.creds import oai_token, oai_organization
+# pylint: disable=import-error
+from examples.creds import oai_token, oai_organization  # type: ignore
 from examples.test_generator.gpt_functions import gpt_functions, gpt_functions_dict
 from examples.test_generator.pom_case_generator import PomTestCaseGenerator
 from utils.logger_config import setup_logger

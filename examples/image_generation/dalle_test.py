@@ -13,7 +13,8 @@ This file contains testing procedures for DALLE experiments
 import asyncio
 from openai_python_api import DALLE
 
-from examples.creds import oai_token, oai_organization
+# pylint: disable=import-error
+from examples.creds import oai_token, oai_organization  # type: ignore
 
 
 dalle = DALLE(auth_token=oai_token, organization=oai_organization)

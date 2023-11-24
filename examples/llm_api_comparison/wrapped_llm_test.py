@@ -13,8 +13,9 @@ This file contains benchmarks for wrapped LLMs models.
 
 from ablt_python_api import ABLTApi
 
-from examples.creds import ablt_token
-from examples.llm_api_comparison.ablt_models import unique_models
+# pylint: disable=import-error
+from examples.creds import ablt_token  # type: ignore
+from examples.llm_api_comparison.ablt_models import unique_models  # type: ignore
 from examples.llm_api_comparison.csv_saver import save_to_csv
 from examples.llm_api_comparison.llm_questions import llm_questions
 from utils.llm_timer_wrapper import TimeMetricsWrapperSync
