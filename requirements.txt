@@ -5,7 +5,7 @@ mpyg321==2.1.1
 mutagen==1.47.0
 pydub==0.25.1
 # Transcriptor
-SpeechRecognition==3.10.0
+SpeechRecognition==3.10.1
 # Translator
 deep_translator==1.11.4
 # Recorder
