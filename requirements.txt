@@ -29,7 +29,7 @@ llamaapi==0.1.36
 # My AI APIs
 leonardo-api==0.0.10
 openai-python-api==0.0.6
-ablt-python-api==0.0.2
+ablt-python-api==0.0.3
 # Discord
 py-cord==2.4.1
 openai==1.3.7
