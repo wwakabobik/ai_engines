@@ -21,7 +21,7 @@ from examples.llm_api_comparison.llm_questions import llm_questions
 from utils.llm_timer_wrapper import TimeMetricsWrapperSync
 
 # Initialize LLM with tokens
-ablt = ABLTApi(ablt_token, ssl_verify=False)
+ablt = ABLTApi(ablt_token)
 
 
 @TimeMetricsWrapperSync
@@ -36,7 +36,7 @@ def check_chat_ablt_response(prompt, model):
     :return: The metrics of the function.
     :rtype: dict
     """
-    return ablt.chat(bot_slug=model, prompt=prompt, max_words=100, stream=False).__next__()
+    return ablt.chat(bot_slug=model, prompt=prompt, max_words=None, stream=False).__next__()
 
 
 def main():
