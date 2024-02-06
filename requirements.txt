@@ -35,4 +35,4 @@ openai-python-api==0.0.6
 ablt-python-api==0.0.3
 # Discord
 py-cord==2.4.1
-openai==1.10.0
+openai==1.11.1
