@@ -34,5 +34,5 @@ leonardo-api==0.0.10
 openai-python-api==0.0.8
 ablt-python-api==0.0.4
 # Discord
-py-cord==2.4.1
+py-cord==2.5.0
 openai==1.13.3
