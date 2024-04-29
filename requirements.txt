@@ -23,11 +23,11 @@ readability==0.3.1
 # Testing
 webdriver_manager==4.0.1
 selenium==4.20.0
-pytest==8.1.1
+pytest==8.2.0
 pytest-json-report==1.5.0
-pytest-xdist==3.5.0
+pytest-xdist==3.6.1
 # Third-party-test
-cohere==5.3.2
+cohere==5.3.3
 llamaapi==0.1.36
 # My AI APIs
 leonardo-api==0.0.10
@@ -35,4 +35,4 @@ openai-python-api==0.0.8
 ablt-python-api==0.0.4
 # Discord
 py-cord==2.5.0
-openai==1.23.2
+openai==1.23.6
