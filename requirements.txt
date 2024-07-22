@@ -2,7 +2,7 @@
 asyncio==3.4.3
 aiohttp>=3.8.6
 # TTS
-gtts==2.5.1
+gtts==2.5.2
 pyttsx4==3.0.15
 mpyg321==2.2.1
 mutagen==1.47.0
