@@ -30,7 +30,7 @@ pytest-xdist==3.6.1
 cohere==5.11.3
 llamaapi==0.1.36
 # My AI APIs
-leonardo-api==0.0.10
+leonardo-api==0.0.11
 openai-python-api==0.0.8
 ablt-python-api==0.0.6
 # Discord
