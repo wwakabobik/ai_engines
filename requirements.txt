@@ -31,7 +31,7 @@ cohere==5.13.4
 llamaapi==0.1.36
 # My AI APIs
 leonardo-api==0.0.11
-openai-python-api==0.0.8
+openai-python-api==0.0.9
 ablt-python-api==0.0.6
 # Discord
 py-cord==2.6.1
