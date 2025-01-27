@@ -19,7 +19,7 @@ numpy==2.2.1
 # Image
 pillow==11.1.0
 # Articles
-readability==0.3.1
+readability==0.3.2
 # Testing
 webdriver_manager==4.0.2
 selenium==4.27.1
