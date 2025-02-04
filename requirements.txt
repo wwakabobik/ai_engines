@@ -14,7 +14,7 @@ deep_translator==1.11.4
 # Recorder
 pyaudio==0.2.14
 sounddevice==0.5.1
-soundfile==0.13.0
+soundfile==0.13.1
 numpy==2.2.2
 # Image
 pillow==11.1.0
