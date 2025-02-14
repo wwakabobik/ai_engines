@@ -1,6 +1,6 @@
 # async
 asyncio==3.4.3
-aiohttp==3.11.11
+aiohttp==3.11.12
 # TTS
 gtts==2.5.4
 pyttsx4==3.0.15
