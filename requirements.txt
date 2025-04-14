@@ -17,7 +17,7 @@ sounddevice==0.5.1
 soundfile==0.13.1
 numpy==2.2.4
 # Image
-pillow==11.1.0
+pillow==11.2.1
 # Articles
 readability==0.3.2
 # Testing
