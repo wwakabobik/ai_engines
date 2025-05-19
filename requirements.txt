@@ -13,7 +13,7 @@ SpeechRecognition==3.14.2
 deep_translator==1.11.4
 # Recorder
 pyaudio==0.2.14
-sounddevice==0.5.1
+sounddevice==0.5.2
 soundfile==0.13.1
 numpy==2.2.4
 # Image
