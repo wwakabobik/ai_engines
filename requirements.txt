@@ -22,7 +22,7 @@ pillow==11.2.1
 readability==0.3.2
 # Testing
 webdriver_manager==4.0.2
-selenium==4.32.0
+selenium==4.33.0
 pytest==8.3.5
 pytest-json-report==1.5.0
 pytest-xdist==3.6.1
