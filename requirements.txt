@@ -27,7 +27,7 @@ pytest==8.4.2
 pytest-json-report==1.5.0
 pytest-xdist==3.8.0
 # Third-party-test
-cohere==5.17.0
+cohere==5.18.0
 llamaapi==0.1.36
 # My AI APIs
 leonardo-api==0.0.11
