@@ -56,3 +56,8 @@ midjourney_cookie="skjaklshkldfhkjsahjhfkjbkfsa"
 ```
 
 GL&HF!
+
+
+# Donations
+
+You may support my work via [Buy Me A Coffee](https://www.buymeacoffee.com/wwakabobik) or [Thanks Dev](https://thanks.dev/wwakabobik) or [Donation Alerts](https://www.donationalerts.com/r/rocketsciencegeek)
