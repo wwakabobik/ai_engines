@@ -11,6 +11,7 @@ It is not a framework, but a collection of useful tools and examples. It's not a
   - [x] [speak_and_hear](/examples/speak_and_hear) - see [article](https://wwakabobik.github.io/2023/09/ai_learning_to_hear_and_speak/) first, this is LLM speech recognition and TTS example
   - [x] [test_generator](/examples/test_generator) - see [article](https://wwakabobik.github.io/2023/10/qa_ai_practices_used_for_qa/) first, this is QA automatic tests generator
   - [x] [llm_api_comparison](/examples/llm_api_comparison) - see [article](https://wwakabobik.github.io/2023/12/ai_llms_2023/) first, this is LLM API comparison for 2023
+  - [x] [chroma_migration](/examples/chroma_migration) - see [article](https://wwakabobik.github.io/2025/11/migrating_chroma_db/) first, this is example of migrating ChromaDB from < v0.7.x to v1.x.x
 - [x] [**utils**](/utils) - a collection of useful tools for AI development, in general them all of them used in example projects:
   - [x] [article_extractor](/utils/article_extractor.py) - limbo for article extraction from web pages
   - [x] [audio_recorder](/utils/audio_recorder.py) - a simple audio recorder, used in speech recognition / TTS examples
@@ -23,6 +24,7 @@ It is not a framework, but a collection of useful tools and examples. It's not a
   - [x] [transcriptors](/utils/transcriptors.py) - custom transcriptors wrappers for speech recognition
   - [x] [translators](/utils/translators.py) - custom translators for text translation wrappers
   - [x] [tts](/utils/tts.py) - custom TTS engines wrappers
+  - [x] [chroma_migration](utils/chromadb_migration/) - utilities for ChromaDB management and migration
 
 ## Running up that hill
 
@@ -38,6 +40,7 @@ pip install -r requirements.txt  # install dependencies
 # then you may run some top-level script, like:
 PYTHONPATH=. python -m examples.test_generator.generator_test
 PYTHONPATH=. python -m examples.speak_and_hear.test_gpt 
+PYTHONPATH=. python -m examples.chroma_migration.migrate_chroma_test
 ```
 
 Well, in most cases you need to create cred file to run examples, so, create `creds.py` under `examples` directory and fill it with your credentials, like:

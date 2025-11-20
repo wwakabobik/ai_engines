@@ -37,3 +37,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Bumped requirements
 - Removed submodules (moved to requirements - OpenAI API, Leonardo API)
 - Added python 3.12 for linting
+
+## [0.4] - 2025-11-25
+
+### Added
+- Added chromaDB migration utils

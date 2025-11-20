@@ -1,0 +1,4 @@
+langchain==0.3.26
+langchain_chroma
+chromadb==0.6.3
+langchain_openai
