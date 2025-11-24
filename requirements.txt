@@ -4,7 +4,7 @@ asyncio==4.0.0
 # TTS
 gtts==2.5.4
 pyttsx4==3.0.15
-mpyg321==2.2.2
+mpyg321==2.2.4
 mutagen==1.47.0
 pydub==0.25.1
 # Transcriptor
