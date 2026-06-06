@@ -1,5 +1,5 @@
 # async
-aiohttp==3.13.4
+aiohttp==3.13.5
 asyncio==4.0.0
 # TTS
 gtts==2.5.4
