@@ -5,7 +5,7 @@ asyncio==4.0.0
 gtts==2.5.4
 pyttsx4==3.0.15
 mpyg321==2.2.4
-mutagen==1.47.0
+mutagen==1.48.1
 pydub==0.25.1
 # Transcriptor
 SpeechRecognition==3.17.0
